@@ -1,0 +1,17 @@
+<apex:page controller="GoalSeek_a" sidebar="false">
+<apex:form >
+ <p> Revenue Target <apex:inputText value="{!targetrevenue}"></apex:inputText></p>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class Type <apex:inputText value="{!classtype}"></apex:inputText></p>
+  <p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quarter <apex:inputText value="{!quarter}"></apex:inputText></P>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp <apex:commandButton action="{!estimate}" value="Submit"></apex:commandButton>
+   <apex:outputPanel id="out">
+                <apex:actionstatus id="status" startText="testing...">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >                                                                    
+                                        <apex:dataList value="{!projectedrevenue}" var="c">a:{!c}</apex:dataList>
+                                </apex:outputPanel>
+                        </apex:facet>
+                </apex:actionstatus>
+        </apex:outputPanel>
+  </apex:form>
+</apex:page>

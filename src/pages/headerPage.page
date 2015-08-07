@@ -1,0 +1,34 @@
+<apex:page >
+<!--<apex:stylesheet value="{!URLFOR($Resource.resources_css,'/i2_resource/css/i2.css')}"/>-->
+<style>
+.color_white
+{
+color:#ffffff;
+font-size:11px;
+}
+</style>
+ <table width="1024" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="223" height="80" class="logo"></td>
+    <td width="801" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24" align="right"  class="welcome_links"><table border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td></td>
+    <td class="color_white">Welcome</td>
+    <td class="color_white"><apex:outputText value="{!$User.LastName}" ></apex:outputText></td>
+    <td class="color_white">|</td>
+   
+    <td class="color_white"><apex:outputLink value="/secur/logout.jsp" style="logout" styleClass="color_white">Logout</apex:outputLink></td>
+  </tr>
+</table>
+</td>
+      </tr>
+      <tr>
+        <td height="55" valign="top" class="line_image"></td>
+      </tr>
+     
+    </table></td>
+  </tr>
+</table>
+</apex:page>

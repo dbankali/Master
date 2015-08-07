@@ -1,0 +1,17 @@
+<apex:page controller="testcontroller">
+ <apex:form >
+ <apex:pageblock >
+ <apex:outputText ><b>Name</b></apex:outputText>
+ <apex:inputText title="Name" value="{!name}"/><br>
+ <apex:outputText ><b>EmpId</b></apex:outputText>
+ <apex:inputtext title="empId" value="{!empId}"/><br>
+ <apex:outputText ><b>Country</b> </apex:outputText>
+ <apex:selectList title="Countruy" value="{!country}">
+ <apex:selectoptions value="{!items}"></apex:selectoptions>
+ </apex:selectList>
+ <apex:pageblockButtons >
+  <apex:commandButton />
+ </apex:pageblockButtons>
+ </apex:pageblock>
+ </apex:form>
+</apex:page>

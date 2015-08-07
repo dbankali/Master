@@ -1,0 +1,68 @@
+<apex:page >
+<HTML><HEAD><script src="/soap/ajax/14.0/connection.js"></script><script src="/soap/ajax/14.0/apex.js"></script>
+ </HEAD>
+<SCRIPT LANGUAGE="JavaScript">
+    function openChild(file,window1) {
+        var childWindow=window.open('','name','height=400,width=500');
+        //childWindow=open('','','resizable=yes,width=600,height=600');
+        //alert('childWindow :'+childWindow.document);
+        if (childWindow.opener == null){ 
+            childWindow.opener = self;
+        }else{
+            childWindow.document.write('<FORM NAME="childForm"  >');
+            childWindow.document.write('<BR>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<INPUT NAME="cf1To" TYPE="TEXT" VALUE="" size="60">');
+            childWindow.document.write('<BR>CC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<INPUT NAME="cf2Cc" TYPE="TEXT" VALUE="" size="60">');
+            childWindow.document.write('<BR>Subject&nbsp;:<INPUT NAME="cf3Subject" TYPE="TEXT" VALUE="" size="60">');
+            childWindow.document.write('<BR><TEXTAREA NAME="cf4Body" COLS=55 ROWS=10></TEXTAREA>');
+            //childWindow.document.write('<BR><INPUT TYPE="button" VALUE="Submit" onClick="includescript:{\'/soap/ajax/12.0/connection.js\';\'/soap/ajax/14.0/apex.js\';};javascript:{alert(\'hi\');alert(\'Cf1To :\'+document.childForm.cf1To.value);;opener.document.parentForm.pf1.value = document.childForm.cf1To.value;self.close();try{var success = sforce.apex.execute(\'EmailTestWebServiceClass\',\'updateEmailTest\',{a:chkBox[i].id,b:ruleIdHd[j].id}); }catch(e){alert(\'Exception=\'+e);}return false;}">');
+            //childWindow.document.write('<BR><INPUT TYPE="button" VALUE="Submit" onClick="javascript:{\'/soap/ajax/14.0/connection.js\';\'/soap/ajax/14.0/apex.js\';alert(\'hi\');alert(\'Cf1To :\'+document.childForm.cf1To.value);;opener.document.parentForm.pf1.value = document.childForm.cf1To.value;try{var success = sforce.apex.execute(\'EmailTestWebServiceClass\',\'updateEmailTest\',{a:chkBox[i].id,b:ruleIdHd[j].id}); }catch(e){alert(\'Exception=\'+e);}self.close();return false;}">');
+            childWindow.document.write('<BR><INPUT TYPE="button" VALUE="Send" onClick="javascript:{opener.document.parentForm.pf1To.value = document.childForm.cf1To.value;opener.document.parentForm.pf2Cc.value = document.childForm.cf2Cc.value;opener.document.parentForm.pf3Subject.value = document.childForm.cf3Subject.value;opener.document.parentForm.pf4Body.value = document.childForm.cf4Body.value; window.opener.updateRecord();self.close();return false;}">');
+            childWindow.document.write('<INPUT TYPE="button" VALUE="Cancel" onClick="javascript:{self.close();return false;}">');
+            childWindow.document.write('</FORM>');
+            childWindow.document.childForm.cf1To.value='yashavant_bhalekar@persistent.co.in';
+            childWindow.document.childForm.cf2Cc.value='manjiri_yatnalkar@persistent.co.in';
+            childWindow.document.childForm.cf3Subject.value='Confirmation';
+        }
+     }
+     function updateRecord(){
+        //alert('updateRecord');
+        //alert('updateRecord pf1 :'+document.parentForm.pf1.value);
+        sforce.connection.sessionId='{!$Api.Session_ID}';
+        var emailTo=document.parentForm.pf1To.value;
+        var emailCc=document.parentForm.pf2Cc.value;
+        var emailSubject=document.parentForm.pf3Subject.value;
+        var emailBody=document.parentForm.pf4Body.value;
+        
+        var emailToArray = new Array();
+        emailToArray= emailTo.split(';');
+        
+        var emailCcArray = new Array();
+        emailCcArray= emailCc.split(';');
+        
+        alert('emailTo:'+emailTo+' emailCc:'+emailCc+' emailSubject:'+emailSubject+' emailBody:'+emailBody);
+        
+        alert('emailToArray[0]='+emailToArray[0]+' emailToArray[1]='+emailToArray[1]);
+        try{
+            var success = sforce.apex.execute('EmailTestWebServiceClass','updateEmailTest',{a:emailToArray,b:emailCcArray,c:emailSubject,d:emailBody}); 
+            //alert('Success :'+success);
+            if(success){
+                alert('Record is inserted successfully....');
+            }
+        }catch(e){
+            alert('Exception='+e);
+        }
+     }
+</SCRIPT>
+
+<BODY>
+<FORM NAME="parentForm">
+<INPUT TYPE="button" VALUE="Send An Email to Support Team" onClick="openChild('examplejs2.html','win2')">
+
+<INPUT NAME="pf1To" TYPE="hidden" VALUE="">
+<INPUT NAME="pf2Cc" TYPE="hidden" VALUE="">
+<INPUT NAME="pf3Subject" TYPE="hidden" VALUE="">
+<INPUT NAME="pf4Body" TYPE="hidden" VALUE="">
+</FORM>
+</BODY></HTML>
+
+</apex:page>

@@ -1,0 +1,10 @@
+<apex:page controller="ContactListController3" sidebar="false" showHeader="false" contentType="application/vnd.ms-excel#b.xls">
+ <apex:form >
+  <apex:dataTable value="{!sCList}" var="selectedList">
+   <apex:column headervalue="List" value="{!selectedList.theCList.List_Name__c}"></apex:column>
+   <apex:column headervalue="Comments" value="{!selectedList.theCList.Comments__c}"></apex:column>
+   <apex:column headervalue="Access" value="{!selectedList.theCList.Access__c}"></apex:column>
+   <apex:column headervalue="# no of Contacts" value="{!selectedList.count}"></apex:column>
+  </apex:dataTable>
+  </apex:form> 
+</apex:page>

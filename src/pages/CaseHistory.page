@@ -1,0 +1,23 @@
+<apex:page controller="CaseHistoryCon" tabStyle="Case" sidebar="false">
+    <apex:form >
+        <apex:sectionHeader title="Case History" subtitle="Case Number: {!case.casenumber}"/>
+        <apex:pageBlock id="thePageBlock">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Back to Case : {!case.casenumber}" action="{!backToCase}"/>
+                <apex:commandButton value="{!IF(hidePrivate, 'Show ', 'Hide ')}Private" action="{!togglePrivate}" rerender="thePageBlock" status="status"/>
+                <apex:commandButton value="{!IF(fullComments, 'Short ', 'Full ')}Comments" action="{!toggleComments}" rerender="thePageBlock" status="status"/> 
+                <apex:actionStatus id="status" startText="requesting..."/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!histories}" var="h">
+                <apex:column headerValue="Date"  value="{!h.historyDate}"/>
+                <apex:column headerValue="Public">
+                    <apex:image value="{!URLFOR($Resource.images_checkbox, IF(h.ispublic, 'true.gif','false.gif'))}"/>
+                </apex:column>
+                <apex:column headerValue="Who"  value="{!h.actorname}"/>
+                <apex:column headerValue="What" value="{!h.historyType}"/>
+                <apex:column headerValue="From" value="{!h.fr}"/>
+                <apex:column headerValue="To"   value="{!h.to}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

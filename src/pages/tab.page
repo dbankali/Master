@@ -1,0 +1,37 @@
+<apex:page showheader="false" >
+<apex:image />
+<apex:outputText >Welcome {!$User.FirstName}</apex:outputText>&nbsp;|&nbsp;
+<apex:outputLink value="/secur/logout.jsp" title="Logout">Logout</apex:outputLink>
+<script>
+
+function hi(){
+
+   window.location="/00O/o";
+  alert("hi");
+}
+</script>
+<style>
+                .activeTab1 {background-color: #CCCCCC; font-weight:bold; color:black; background-image:none}
+                .inactiveTab1 { background-color: #CCCC99; color:black; background-image:none}
+                .text_white{
+                    color:#ffffff;
+                    }
+                   
+                    
+
+        </style>
+  <apex:tabPanel activeTabClass="activeTab1" inactiveTabClass="inactiveTab1" disabledTabClass="inactiveTab1">
+  <apex:tab label="Dummy">
+  <apex:ListViews type="Test__c" />
+
+  </apex:tab>
+    <apex:tab label="Accounts">   
+           <apex:ListViews type="Account" />
+       <!--<apex:iframe src="/001/o"  height="900px" scrolling="true"/>-->
+    
+       
+      <apex:detail relatedlist="false" title="true"/> 
+    </apex:tab>  
+    <apex:tab label="outlet" disabled="true"></apex:tab>
+  </apex:tabPanel>
+</apex:page>

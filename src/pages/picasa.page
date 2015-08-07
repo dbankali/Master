@@ -1,0 +1,8 @@
+<apex:page standardController="Document">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page
+  <!-- End Default Content REMOVE THIS -->
+  <apex:image url="http://lh3.ggpht.com/_d7uS6jtvRTI/SPSxp0YzXQI/AAAAAAAAAVg/WG0Nz6nyAmI/s512/IMG_0380.JPG"/>
+  <apex:image value="{!}"/>
+</apex:page>

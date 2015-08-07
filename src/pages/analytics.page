@@ -1,0 +1,18 @@
+<apex:page sidebar="false">
+<style>                
+.activeTab {background-color: #0076c0; color:#ffffff; background-image:none;font-size: 11px;font-weight: bold;padding:4px 8px 4px 8px;text-align:center;text-decoration: none;}                
+.inactiveTab { background-color: #00CCFF; color:#ffffff; background-image:none;font-size: 11px;font-weight: bold;padding:4px 8px 4px 8px;text-align:center;text-decoration: none;}                                   
+</style>   
+<apex:tabPanel switchType="server" tabClass="activeTab" inactiveTabClass="inactiveTab">    
+<apex:tab label="Scenario" id="tItem_Master" style="background-color:white;font:bold">    
+<div style="background-color:white;" >    
+<apex:include pageName="ScenarioApplication"></apex:include>    
+</div>   
+ </apex:tab>    
+ <apex:tab label="Goal Seek" id="goalseek" style="background-color:white;">    
+ <div style="background-color:white;" >    
+ <apex:include pageName="goalseek"></apex:include>    
+ </div>    
+ </apex:tab>   
+  </apex:tabPanel>
+  </apex:page>

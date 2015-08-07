@@ -1,0 +1,17 @@
+<apex:page controller="myClass1"> 
+  <!-- Begin Default Content REMOVE THIS -->
+  <apex:form >
+  <apex:pageBlock >
+    <apex:outputLink value="https://na3.salesforce.com/apex/page2">Page1</apex:outputLink>
+  </apex:pageBlock>
+  <apex:inputText value="{!numb}"></apex:inputText>
+  {!numb}
+  {!no}
+            <h1>Congratulations</h1>
+  This is your new Page: page1
+  <p>{!xyz}</p>
+  <p>{!abc}</p>
+  </apex:form>
+
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

@@ -1,0 +1,27 @@
+<apex:page Controller="MyController1" >
+
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>{!$User.userName}
+  This is your new Page: CustomCtrl1{!name}
+  <!-- End Default Content REMOVE THIS -->
+  <apex:pageBlock title="Accounts">
+  <apex:form >  
+    <apex:pageBlockTable value="{!account}" var="acc">    
+            <apex:column headertitle="Account ID" headerValue="Account Id"> 
+            <apex:commandLink rerender="detail">
+            {!acc.id}
+            <apex:param name="id" value="{!acc.id}"/>
+            </apex:commandLink> </apex:column>
+                    <apex:column headertitle="Account Name" headerValue="Account Name"> 
+            <apex:commandLink rerender="detail">
+            {!acc.name}
+            <apex:param name="id" value="{!acc.id}"/>
+            </apex:commandLink> </apex:column>  
+    
+  </apex:pageBlockTable>
+  </apex:form>
+  </apex:pageBlock>
+  <apex:outputPanel id="detail">
+    <apex:detail subject="{!$CurrentPage.parameters.id}" relatedList="false" title="false"/>
+</apex:outputPanel>
+</apex:page>

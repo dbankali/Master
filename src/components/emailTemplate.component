@@ -1,0 +1,5 @@
+<apex:component controller="EmailTemplateComponentontroller" access="global">
+  <apex:attribute name="RequestNumber" description="This is the request detail number" type="String" assignTo="{!attribute1}" />
+  Label:
+  <apex:outputText value="{!isTrue}"/>
+</apex:component>

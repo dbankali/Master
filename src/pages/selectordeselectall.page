@@ -1,0 +1,17 @@
+<apex:page controller="LeadAccountController">     
+    <apex:form >
+        <apex:pageBlock >
+            <apex:dataTable value="{!LeadAccountList}" var="leadAccount" styleClass="list" >
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:inputCheckbox value="{!IsAllSelected}">
+                            <apex:actionSupport event="onclick" action="{!selectAll}" rerender="table"/>
+                        </apex:inputCheckbox>
+                    </apex:facet>                    
+                    <apex:inputCheckbox value="{!leadAccount.IsSelected}" id="table"> 
+                    </apex:inputCheckbox>
+                </apex:column>   
+            </apex:dataTable>
+        </apex:pageBlock> 
+    </apex:form>
+</apex:page>

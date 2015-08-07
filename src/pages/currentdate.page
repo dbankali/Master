@@ -1,0 +1,8 @@
+<apex:page controller="currentdate">
+<apex:form >
+  <apex:commandButton action="{!generate}" value="submit" rerender="out"></apex:commandButton>
+  <apex:outputLabel id="out">
+  <apex:inputText value="{!mydate}"></apex:inputText>
+  </apex:outputLabel>
+  </apex:form>
+</apex:page>

@@ -1,0 +1,49 @@
+<apex:page controller="Checkbox_Class" Tabstyle="Account">
+<apex:form >
+
+ <!-- 
+ * This source code was written by SrinivasaRao Pendala. 
+ * I have made every effort and taken great care in making sure that the source
+ * code and other content included on my wiki is technically accurate.
+ * As with any code, ensure to test this code in a development environment 
+ * before attempting to run it in production.
+ -->
+
+<apex:pageBlock Title="Accounts with CheckBoxes">
+<apex:pageBlockSection Title="List of Available Accounts">
+<apex:dataTable value="{!accounts}" var="a" columnswidth="50px,50px" cellpadding="4" border="1">
+<apex:column >
+<apex:facet name="header"> <apex:inputCheckbox >
+<apex:actionSupport event="onclick" action="{!GetSelected}" onsubmit="checkAll(this)" rerender="Selected_PBS"/>
+</apex:inputCheckbox></apex:facet>
+<apex:inputCheckbox value="{!a.selected}" id="checkedone">
+<apex:actionSupport event="onclick" action="{!GetSelected}" rerender="Selected_PBS"/>
+</apex:inputCheckbox></apex:column>
+<apex:column headervalue="Account Name" value="{!a.acc.Name}" />
+<apex:column headervalue="Account Number" value="{!a.acc.AccountNumber}" />
+<apex:column headervalue="Phone" value="{!a.acc.Phone}" />
+</apex:dataTable>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection Title="Selected Accounts" id="Selected_PBS">
+<apex:dataTable value="{!SelectedAccounts}" var="s" columnswidth="50px,50px" cellpadding="4" border="1">
+<apex:column headervalue="Account Name" value="{!s.Name}" />
+<apex:column headervalue="Account Number" value="{!s.AccountNumber}" />
+<apex:column headervalue="Phone" value="{!s.Phone}" />
+</apex:dataTable>
+</apex:pageBlockSection>
+
+</apex:pageBlock>
+</apex:form>
+<script>
+function checkAll(cb)
+{
+var inputElem = document.getElementsByTagName("input");
+for(var i=0; i<inputElem.length; i++)
+{
+if(inputElem[i].id.indexOf("checkedone")!=-1)
+inputElem[i].checked = cb.checked;
+}
+}    
+</script>
+</apex:page>

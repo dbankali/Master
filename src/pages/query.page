@@ -1,0 +1,22 @@
+<apex:page >
+<script src="/soap/ajax/13.0/connection.js"></script>
+  <script>
+function setupPage() {
+alert("inside func");
+try{
+sforce.sessionId = getCookie('sid');
+sforce.connection.sessionId=sforce.sessionId;
+
+var result = sforce.connection.query("Select Id, Name, Industry From Account order by Industry limit 30");
+alert(result);
+}catch(error){
+alert(error);
+}
+}
+</script>
+<apex:form >
+<apex:pageBlock id="block">
+<apex:commandButton value="Click" onclick="setupPage();" rerender="block"></apex:commandButton>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

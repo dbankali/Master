@@ -1,0 +1,7 @@
+<apex:page >
+   <p>this is line 1 </p> <br/>this is line 2
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: linebreak
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

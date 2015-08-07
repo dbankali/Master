@@ -1,0 +1,32 @@
+<apex:page >
+<script src="/soap/ajax/13.0/connection.js"></script> 
+<script>
+function meth(){
+var items = new Array();
+for (var i = 0; i < 3;i++) {
+var item = new sforce.SObject("Item__c");
+item.Item_Name__c = "Anil";
+items.push(item);
+}
+
+var callCompleted = false;
+try {
+//sforce.connection.login("admin@applabde364.com", "anil1");
+sforce.sessionId = getCookie('sid');
+sforce.connection.sessionId=sforce.sessionId;
+alert(items);
+var result = sforce.connection.create(items);
+callCompleted = true;
+} catch(error) {
+alert("Failed to insert items with error: " + error);
+}
+}
+</script>
+<apex:form >
+<apex:pageBlock title="trial" id="id">
+<apex:commandButton value="submit" onclick="meth();" rerender="id">
+</apex:commandButton>
+<!--<input type = "submit" value="submit" onclick="meth();" id ="submit">-->
+</apex:pageBlock>
+</apex:form>
+</apex:page>

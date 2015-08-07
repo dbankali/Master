@@ -1,0 +1,145 @@
+<apex:page controller="ReplenishableLocations2">
+<apex:form >
+
+<script src="/soap/ajax/13.0/connection.js"></script> 
+<script src="/soap/ajax/13.0/apex.js"></script>
+<script>
+/* This method is used to select 
+       or deselect all checkboxes*/
+function selectordeselect(field,box){
+        if(box.checked){
+          for(i=0;i < field.length;i++){
+            field[i].checked = true;
+          }
+        }else if(!box.checked){
+
+            for(i=0;i < field.length;i++)
+               field[i].checked = false;
+         }
+}
+
+
+/* this method reads the values and
+       stores them in the SObject*/
+   function store(){
+   alert("Inside store");
+   //sforce.sessionId = getCookie('sid');
+   //sforce.connection.sessionId=sforce.sessionId;
+   sforce.connection.sessionId = "{!$Api.Session_ID}";
+  // sforce.apex.sessionId = sforce.sessionId;
+        items = document.getElementsByName("itemsname");
+        itemArray = new Array();
+        j=0;
+        for(i=0;i < items.length;i++){
+          if(items[i].checked){
+            itemArray[j] = items[i].value;
+            j = j+1;
+          }        
+        }        
+        locations = document.getElementsByName("locationsname");
+        locationArray = new Array();
+        k =0;
+        for(l=0;l < locations.length;l++){
+          if(locations[l].checked){
+            locationArray[k] = locations[l].value;
+            //alert(locationArray[k]);
+            k = k+1;
+          }        
+        } 
+     /*   alert("before");
+        try{
+        //sforce.connection.login("admin@applabde364.com", "anil1Nvx0U7DbnjJ19diXfyi6oHuU");
+        var result = sforce.apex.execute('ItemLocationInsert','insertItemloc',{items:itemArray,locations:locationArray});
+        alert(result);
+        }catch(error){
+          
+          alert(error);
+        }
+        alert("count: "+result);*/
+       var itemlocations = new Array();
+        var count = 0;
+        var twoD = 0;
+         itemlocations[0] = new Array();
+         for(m=0;m<itemArray.length;m++){
+           for(n=0;n<locationArray.length;n++){                  
+                  var itemloc = new sforce.SObject("Item_location__c");
+                  itemloc.Item_Name__c = itemArray[m];
+                  itemloc.Location_Name__c = locationArray[n];
+                  itemloc.ItemLoc_ExId__c = itemArray[m]+"at"+locationArray[n];
+                  itemlocations[twoD].push(itemloc);
+                 // alert(itemloc);
+                  count = count + 1;
+                  if(count==200){
+                    twoD = twoD + 1; 
+                      itemlocations[twoD] = new Array();
+                    count = 0;                
+                  }                  
+            }
+        } 
+        
+       var callCompleted = false;
+    try {
+       
+           for(var iter=0;iter<itemlocations.length;iter++){
+          // alert(iter+ "====" + itemlocations.length);
+           var itemloc = new Array();
+            itemloc  =  itemlocations[iter];
+           // alert(itemloc);
+           //alert("Item locations"+itemlocations[iter]);      
+             var result = sforce.connection.create(itemlocations[iter]);
+             callCompleted = true;
+              for (var i=0; i<result.length; i++) {
+                 if (result[i].getBoolean("success")) {
+                    log("new Item_Location__c created with id " + result[i].id);
+                 } else {
+                   log("failed to create Item_Location__c " + result[i]);
+                 }
+              }
+           }
+   } catch(error) {
+     alert("Failed to insert Item Location with error: " + error);
+   }
+
+} 
+function log(message) {
+    alert(message);
+}   
+</script>
+
+<apex:pageBlock id="pageblock">
+<apex:outputPanel id="out1">
+                   <apex:actionstatus id="status1" startText="Inserting ...">
+                        <apex:facet name="stop">
+                               <apex:outputPanel >
+                                <div class="pbError" id="errorDiv_ep">
+                                       <apex:outputText style="font-style:Bold" value="{!message}"></apex:outputText>
+                                   </div>
+                                                                      
+                           </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel> 
+<apex:pageBlockSection >
+<apex:pageblockSection title="Items" id="pageblocksec1" columns="1">
+<input type="checkbox" name="masteritem" id="masterItem" onclick="selectordeselect(document.getElementsByName('itemsname'),document.getElementById('masterItem'));"/><b>SelectAllItems</b><br/>
+<apex:datatable value="{!items}" var="iter">
+<apex:column >
+<input type="checkbox" value="{!iter.Item_Name__c}" name="itemsname"/>{!iter.Item_Name__c}
+</apex:column>
+</apex:datatable>
+</apex:pageblockSection>
+<apex:pageblockSection title="Locations" id="pageblocksec2" columns="1">
+<input type="checkbox" name="masterLocation" id="masterLocation" onclick="selectordeselect(document.getElementsByName('locationsname'),document.getElementById('masterLocation'));"/><b>SelectAllLocations</b><br/>
+<apex:datatable value="{!locations}" var="iterations">
+<apex:column >
+<input type="checkbox" value="{!iterations.Location_Name__c}" name="locationsname"/>{!iterations.Location_Name__c}
+</apex:column>
+</apex:datatable>
+</apex:pageblockSection>
+</apex:pageBlockSection>
+<apex:pageBlockButtons >
+<apex:commandButton onclick="store();" value="Submit" rerender="outblock"></apex:commandButton>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form> 
+</apex:page>

@@ -1,0 +1,30 @@
+<apex:page Controller="AccountSelectController">
+  <apex:form >  
+   <apex:pageBlock title="Available Accounts">
+      <apex:pageBlockTable title="Accounts" id="PickAccts" value="{!MyAcct}" var="aAcct" >
+        <apex:column >
+        <!--<input type="checkbox" value="{!aAcct.selected}" Id="selectLine"/>-->
+           <apex:inputCheckBox value="{!aAcct.selected}" Id="selectLine"/>
+        </apex:column>
+        <apex:column headerValue="Account Id" value="{!aAcct.theacct.Id}" />
+        <apex:column headerValue="Account Name" value="{!aAcct.theacct.Name}" />
+      </apex:PageblockTable>
+    <apex:commandButton action="{!gensAcct}" value="Select" rerender="MyPanel,PickAccts" status="status"/> <br />
+    <apex:pageMessages ></apex:pageMessages>
+  </apex:pageBlock>
+
+<apex:actionStatus startText="Updating..." id="status"/>
+
+<apex:outputpanel title="Results" id="MyPanel">
+  <apex:outputpanel title="Wrapper" id="Wrapper" rendered="{!NOT(ISNULL(SAcct))}">
+    <apex:pageBlock >
+      <apex:pageBlockTable title="Accounts" id="PickAccts" value="{!SAcct}" var="aAcct" >
+        <apex:column headerValue="Account Id" value="{!aAcct.theacct.Id}" />
+        <apex:column headerValue="Account Name" value="{!aAcct.theacct.Name}" />
+      </apex:PageblockTable>
+    </apex:Pageblock>
+  </apex:outputpanel>
+</apex:outputpanel>
+
+  </apex:form>
+</apex:page>

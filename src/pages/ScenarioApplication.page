@@ -1,0 +1,266 @@
+<apex:page controller="ScenarioApplication" sidebar="false" >
+<apex:stylesheet value="{$Resource.css_file}"/>
+
+<style type="text/css"> 
+    @import "../../../dojo/resources/dojo.css";
+    @import "../../../dijit/tests/css/dijitTests.css";
+</style> 
+<apex:stylesheet value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojo/resources/dojo.css')}"></apex:stylesheet>
+
+<!-- required for Tooltip: a default dijit theme: --> 
+<link rel="stylesheet" href="../../../dijit/themes/tundra/tundra.css"/> 
+<apex:stylesheet value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dijit/themes/tundra/tundra.css')}"></apex:stylesheet>
+<style> 
+.dojoxLegendNode {border: 1px solid #ccc; margin: 5px 10px 5px 10px; padding: 3px}
+.dojoxLegendText {vertical-align: text-top; padding-right: 10px}
+</style> 
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
+<script type="text/javascript" src="Silverlight.js"></script>
+--> 
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojo/dojo.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojo/fx.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/axis2d/common.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/axis2d/Base.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/axis2d/Default.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/plot2d/Lines.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/plot2d/Areas.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/plot2d/Markers.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/plot2d/MarkersOnly.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/Chart2D.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/action2d/Magnify.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/action2d/Tooltip.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.DojoCharts,'/DojoCharts/dojox/charting/widget/Legend.js')}"></apex:includeScript>
+
+<style>
+     .activeTab1 {background-color:#0076c0; color:#ffffff; background-image:none}
+                
+    .color_red{
+    color:red;
+    }
+    .button_1{
+background-color:#ffdd68;
+padding:1px;
+font-size:11px;
+color:#00000;
+height:22px;
+border:1px solid #d8961e;
+}
+
+.yellow_header{
+background-color:#0076c0;
+padding:5px;
+height:15px;
+color:#ffffff;
+font-size:12px;
+text-align:center;
+font-weight:bold;
+border-right:1px solid #0076c0;
+border-bottom:1px solid #0076c0;
+}
+
+.border1{
+border-top:1px solid  #0076c0;
+border-left:1px solid #0076c0;
+color:#c3771e;
+font-size:11px;
+}
+.data2{
+height:15px;
+padding:5px;
+border-bottom:1px solid #0076c0;
+border-right:1px solid #0076c0;
+font-size:11px;
+color:#000000;
+text-align:center;
+}           
+</style>
+
+<apex:toolbar id="theToolbar" styleClass="activeTab1" contentClass="activeTab1"  height="25px" width="100%">
+                <apex:outputText style="font-style:bold" value=" Commission to be paid if Agent revenue or passenger traffic changes by certain percentage" ></apex:outputText>
+                
+        </apex:toolbar>
+<apex:form >
+<b><apex:outputText value="Following Analytics is for year : "></apex:outputText></b>
+  <apex:selectList value="{!selectedYear}" multiselect="false" size="1" >
+          <apex:selectOptions value="{!years}"/>
+  </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+  <br/><br/>
+  <apex:selectList value="{!selectedoption}" multiselect="false" size="1" >
+          <apex:selectOptions value="{!options}"/>
+  </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  <apex:selectList value="{!selectedcriteria}" size="1" >
+         <apex:selectOptions value="{!criteria}"/>
+  </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;
+  <apex:inputText title="Percentage" value="{!percent}"></apex:inputText>%&nbsp;&nbsp;&nbsp;&nbsp;
+  <apex:selectList value="{!selectedMonth}" size="1" >
+         <apex:selectOptions value="{!months}"/>
+  </apex:selectList><p/>
+  <apex:actionStatus id="displayMessageStatus" startText="Processing..."></apex:actionStatus>
+  
+  <apex:commandButton action="{!save}" value="submit"></apex:commandButton>
+  
+  
+     <apex:outputPanel >
+    
+     <center>
+     <table rowClasses="odd,even" width="50%" border="1" cellspacing="0" cellpadding="0" Class="border1">
+     <tr>
+     <td Class="data2">&nbsp;</td>
+     <td Class="yellow_header">Selected Month Commission</td>
+     <td Class="yellow_header">Predicted</td>
+     </tr>
+     <tr>
+     <td Class="yellow_header"><apex:outputLabel value="Commission"   style="font-style:bold"></apex:outputLabel></td>
+     <td Class="data2"><apex:outputText value="{!selectedMonthCommission}"  style="font-style:bold"></apex:outputText></td>
+     <td Class="data2"><apex:outputText value="{!growthCommission}"  style="font-style:bold"></apex:outputText></td>
+     </tr>
+     
+     </table>
+     </center>
+     </apex:outputPanel>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+     <script> var xarrRevenue =[]; </script>
+     <script> var yarrCommission = []; </script>
+     <script> var yarrBestCommission =[]; </script>
+     <script> var counterRevenue=0; </script>
+     <script> var counterCommission=0; </script>
+     <script> var counterBestCommission=0; </script>
+     
+           
+      <apex:repeat value="{!revenueDataForGraph}" var="ret1">
+      <script>
+      xarrRevenue.push({!ret1});
+      
+      </script>
+      </apex:repeat> 
+     
+      <apex:repeat value="{!commissionDataForGraph}" var="ret2">
+      <script>
+      yarrCommission.push({!ret2});
+      
+      </script>
+      </apex:repeat> 
+     
+      <apex:repeat value="{!commissionDataForBestFeetGraph}" var="ret3">
+      <script>
+      yarrBestCommission.push({!ret3});
+      
+      </script>
+      </apex:repeat> 
+      <script> var revMax={!revenueMax};</script>
+      <script> var commMax={!commissionMax};</script>
+     
+        
+       
+     <script type="text/javascript"> 
+ 
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.green");
+ 
+dojo.require("dojox.charting.action2d.Highlight");
+dojo.require("dojox.charting.action2d.Magnify");
+//dojo.require("dojox.charting.action2d.MoveSlice");
+//dojo.require("dojox.charting.action2d.Shake");
+dojo.require("dojox.charting.action2d.Tooltip");
+ 
+dojo.require("dojox.charting.widget.Legend");
+ 
+dojo.require("dojo.colors");
+dojo.require("dojo.fx.easing");
+ 
+var dc = dojox.charting;
+ 
+var dur = 450;
+ 
+makeObjects = function(){
+        var seriesData =new Array(xarrRevenue.length);
+        
+        //alert(seriesData);
+        for(var i = 0; i < xarrRevenue.length; ++i){
+          
+            seriesData[i]=({x: xarrRevenue[i], y: yarrCommission[i]});
+                
+        }
+        var seriesDataBest =new Array(xarrRevenue.length);
+        //alert(seriesData);
+        for(var i = 0; i < xarrRevenue.length; ++i){
+          
+            seriesDataBest[i]=({x: xarrRevenue[i], y: yarrBestCommission[i]});
+                
+        }
+        var temp=[{x: 1000, y: 120},{x: 1500, y: 160}, {x: 1500, y: 130},{x: 2000, y: 150},{x: 2500, y: 135},{x: 3000, y: 195},{x: 3000, y: 210},{x: 3000, y: 230},{x: 4000, y: 260}, {x: 5000, y: 320},{x: 6000, y: 310}];
+        //alert(seriesData + '\r\n' + temp);
+    
+        var chart1 = new dc.Chart2D("test1");
+    //chart1.setTheme(dc.themes.PlotKit.white);
+    chart1.addPlot("default", {type: "Default", lines: true, markers: true, tension:0});
+    chart1.addAxis("x", {min: 0, max:revMax, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart1.addAxis("y", {vertical: true, min: 0, max: commMax, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart1.addSeries("Actual Data", seriesData,{stroke: {color: "red", width: 0}} );
+    chart1.addSeries("Best Fit", seriesDataBest,{stroke: {color: "#0076c0", width: 3}});
+    var anim1a = new dc.action2d.Magnify(chart1, "default");
+    var anim1b = new dc.action2d.Tooltip(chart1, "default");
+    chart1.render();
+    setAxisTitle(chart1,"x","Revenue",10);
+    setAxisTitle(chart1,"y","Commission",10);
+
+    var legend1 = new dojox.charting.widget.Legend({chart: chart1, horizontal: false}, "legend1");
+    
+    
+       
+        };
+        
+        var setAxisTitle=function(chart, axisname, title, fontsizept) {
+    var axis = chart.axes[axisname];
+    var dim = chart.dim;
+    var offsets=chart.offsets;
+    var ta = chart.theme.axis;
+    var taFont = "font" in axis.opt ? axis.opt.font : ta.font;
+    var x;
+    var y;
+    var label;
+    var rotate=0;
+    if(axis.vertical) {
+        rotate=270
+        label = title;
+        y=dim.height/2  - offsets.b/2;
+        x=0+2*fontsizept;
+    } else {
+        label = title;
+        x=dim.width/2 + offsets.l/2;
+        y=dim.height-fontsizept/2;
+    }
+    var m = dojox.gfx.matrix;
+    var elem = axis.group.createText({x:x, y:y, text:label, align: "middle"});
+    elem.setFont({family:taFont.family, size: fontsizept+"pt", weight: "bold"});
+    elem.setFill('grey');
+    elem.setTransform(m.rotategAt(rotate, x,y));
+};
+        dojo.addOnLoad(makeObjects);
+        
+        </script>
+        
+      <table>
+      <tr>
+      <td> 
+   <div id="test1" style="width: 700px; height: 300px;"></div> 
+   </td>
+   <td>
+<div id="legend1"></div> 
+</td>
+</tr>
+</table>
+  </apex:form>
+</apex:page>

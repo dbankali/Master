@@ -1,0 +1,5 @@
+<apex:page controller="inputChkBox" >
+  <apex:form >
+  <apex:inputCheckbox value="{!}" id="chk1" />
+  </apex:form>
+</apex:page>

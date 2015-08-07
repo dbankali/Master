@@ -1,0 +1,111 @@
+<apex:page controller="ContactListController" sidebar="false">
+<apex:form >
+<style>
+.rowHeaderClass{background:#CCCCCC}
+.rowOddClass{background:#FFFFFF}
+.rowEvenClass{background:#CCCCD0}
+</style>
+<script src="/soap/ajax/13.0/connection.js"></script>
+<script src="/soap/ajax/13.0/apex.js"></script>
+<script>
+
+/* This method is used to select 
+
+       or deselect all checkboxes*/
+
+function selectordeselect(field,box){
+         //alert("inside");
+        if(box.checked){
+          for(i=0;i < field.length;i++){           
+            field[i].checked = true;
+          }
+        }else if(!box.checked){
+            for(i=0;i < field.length;i++)
+               field[i].checked = false;
+         }
+   }
+
+   
+    function exportSelected(field){
+        alert("Inside Export");
+          sforce.connection.sessionId = "{!$Api.Session_ID}";
+          alert(sforce.connection.sessionId);
+        contactList = new Array();
+        var flag = 0;
+        var j=0;
+         for(i=0;i<field.length;i++){             
+             if(field[i].checked){
+             alert(field[i].value);
+              contactList[j] = field[i].value;
+                 j = j+1; 
+                 flag = 1;
+               }                      
+           }
+           alert(contactList);
+           if(flag==1){
+             alert("flag =  = 1");
+            var result = sforce.apex.execute('SelectedContactList','selected',{cl:contactList});     
+            alert(result);      
+           }
+      
+    
+     }
+      
+   </script>
+   <!--<apex:pageBlock title="Contact Lists">-->
+   <b><apex:outputLabel value="Contact List"></apex:outputLabel></b>&nbsp;|&nbsp;
+   <apex:outputLink value="" title="Advanced Contact Search">Advanced Contact Search</apex:outputLink>&nbsp;|&nbsp; <apex:outputLabel value="New Contact"/> <br><br>
+   <div>
+   <apex:commandLink >Delete</apex:commandLink>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <apex:commandLink onclick="exportSelected(document.getElementsByName('contactList'))" action="{!download}">DownLoad To Excel</apex:commandLink>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <table border="0">
+   <th>Contact Lists</th>
+   <tr class="rowHeaderClass">
+   <td width="300px"><input type="checkbox" name="listMaster"  id="listMaster" onclick="selectordeselect(document.getElementsByName('contactList'),document.getElementById('listMaster'));"/>&nbsp;List
+   </td>
+   <td width="200px">Comments
+   </td>
+   <td width="100px">Access
+   </td>
+   <td width="100px"># of Contacts
+   </td>
+   </tr>
+    <tr>
+   <apex:datatable value="{!ContactLists}" var="cList" rules="row" columns="4" columnsWidth="300px,200px,100px,100px" rowClasses="rowOddClass,rowEvenClass">
+    <td><apex:column >    
+   <input type="checkbox" name="contactList" id="contactList" value="{!cList.id}"/>
+        <apex:commandLink action="{!contactsList}" rerender="contactsTable">
+            {!cList.List_Name__c}
+            <apex:param name="id" value="{!cList.id}"/>
+            </apex:commandLink>              
+   </apex:column></td>
+   <td><apex:column >
+     {!cList.Comments__c}   
+   </apex:column></td>>
+   <td><apex:column >
+     {!cList.Access__c}   
+   </apex:column></td>
+  <td> <apex:column >
+     {!cList.no_of_contacts__c}
+   </apex:column></td> 
+    </apex:datatable></tr>
+   </table>
+   <apex:outputPanel id="contactsTable" title="Contacts"><b>Contacts</b>
+    <apex:datatable value="{!Contacts}" var="contact" rendered="{!panelDisplay}"columnsWidth="200px,300px,100px" rowClasses="rowOddClass,rowEvenClass" styleClass="rowHeaderClass">
+       <apex:column headervalue="Name">
+       <apex:commandLink rerender="out1">
+       <apex:param name="id" value="{!contact.id}" />
+       {!contact.Name__c}
+       </apex:commandLink></apex:column>
+       <apex:column headerValue="Address">{!contact.Address__c}</apex:column>
+       <apex:column headerValue="Country">{!contact.Country__c}</apex:column>
+    </apex:datatable>   
+    <apex:outputpanel id="out1">
+    <!-- <apex:detail subject="{!$CurrentPage.parameters.id} "/>-->
+   </apex:outputpanel> 
+   </apex:outputPanel>   
+   </div> 
+   
+
+ </apex:form> 
+</apex:page>

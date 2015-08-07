@@ -1,0 +1,18 @@
+<apex:page controller="SecondController" tabStyle="Account">
+
+<script type="text/javascript">
+function meth1(){
+document.write("Hello World");
+alert("inside meth1");
+}
+</script>
+<apex:includeScript value="/test"/>
+<!--<script type="text/javascript" src="{$Resource.test}"/>-->
+<apex:form >
+
+<apex:inputText onmouseover="javascript:method();" value="{!date1}"/>
+
+<!--<apex:inputText id="demo1" onfocus="javascript:NewCal('demo1','yyyymmdd',false,24)" value="{!date1}"/>-->
+
+</apex:form>
+</apex:page>

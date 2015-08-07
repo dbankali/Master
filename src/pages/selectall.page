@@ -1,0 +1,5 @@
+<apex:page controller="selectAll">
+<apex:form >
+<apex:inputCheckbox value="{!allselected}" title="selectAll" id="chk" selected="true"></apex:inputCheckbox>
+</apex:form>
+</apex:page>

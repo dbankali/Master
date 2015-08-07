@@ -1,0 +1,18 @@
+<apex:page >
+<head>
+<apex:includeScript value="{!URLFOR($Resource.Zoomer,'/zoom.js')}"/>
+</head>
+<body onLoad="changeFontSize(0, 0, true);"> 
+<apex:form >
+
+</apex:form>
+ <p> ahbshb nnakl kasl a kjsahda </p>
+ <A HREF="javascript:increaseFontSize();">Increase</A>
+    <A HREF="javascript:decreaseFontSize();">Decrease</A>
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page
+  <!-- End Default Content REMOVE THIS -->
+</body>
+
+</apex:page>

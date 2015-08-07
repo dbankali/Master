@@ -1,0 +1,64 @@
+<apex:page controller="applyrulecontroller" sidebar="false" showHeader="true">        
+    <apex:sectionHeader title="Apply Rules" subtitle="Select multiple rules to multiple agents." description="" ></apex:sectionHeader>        
+    <apex:form >            
+    <apex:pageBlock title="">                
+    <!--                <apex:stylesheet value="/resources/htdocs/css/basic.css"/>                -->                
+    <apex:outputPanel id="out1">                   
+    <apex:actionstatus id="status1" startText="...">                       
+    
+    <apex:facet name="stop">                                
+    <apex:outputPanel >                                        
+    <h1>                                        
+    <!--<apex:pagemessage severity="confirm" summary="{!message}" strength="1"></apex:pagemessage>-->                                        
+    <apex:outputText style="font-style:bold" value="{!message}"></apex:outputText>                                        <p/>                                        
+    </h1>                                
+    </apex:outputPanel>                        
+    </apex:facet>                    
+    </apex:actionstatus>               
+     </apex:outputPanel>                
+     <p/>                        
+     <apex:pageblockSection title="Rules" columns="1">                                        
+     <apex:selectCheckboxes value="{!selectedRules}" layout="pageDirection">                                
+     <apex:selectOptions value="{!rules}"/><br/>                        
+     </apex:selectCheckboxes><br/>                        
+      </apex:pageblockSection>                    
+       </p>                            
+        <!--                    <h1><apex:outputText style="font-style:bold" value="Select the Rules."></apex:outputText></h1>                   
+         <p/>                                                            
+         <apex:selectList value="{!selectedRules}" multiselect="false" size="1">                           
+          <apex:selectOptions value="{!rules}"/>                   
+           </apex:selectList><p/>                    -->                                 
+             <!--                <h1><apex:outputText style="font-style:bold" value="Select the Agents."></apex:outputText></h1>               <p/>               -->               
+             <apex:pageblockSection title="Agents" columns="1">                                  
+             <apex:selectCheckboxes value="{!selectedAgents}" layout="pageDirection">                            
+             <apex:selectOptions value="{!agents}"/><br/></p>                    
+             </apex:selectCheckboxes><br/></p>                
+             </apex:pageblockSection>                                                
+             <!--                <apex:selectList value="{!selectedAgents}" multiselect="true" size="5">                        
+             <apex:selectOptions value="{!agents}"/>               
+              </apex:selectList><p/>                -->                               
+               <apex:pageblockButtons >                   
+                <apex:commandButton value="Apply Rules" action="{!save}" rerender="out1" status="status1"></apex:commandButton>                
+                </apex:pageblockButtons>                 
+                <!-- <apex:commandButton value="Apply Rules" action="{!save}" rerender="out1" status="status1"/>               -->              
+                </apex:pageBlock>         
+                </apex:form>        
+                <!--         <apex:panelGrid columns="3" id="theGrid">                        
+                <apex:outputText value="First" id="theFirst"/>                       
+                 <apex:outputText value="Second" id="theSecond"/>                        
+                 <apex:outputText value="Third" id="theThird"/>                        
+                 <apex:outputText value="Fourth" id="theFourth"/>                
+                 </apex:panelGrid>        
+                 <apex:outputPanel id="out1">                
+                 <apex:actionstatus id="status1" startText="testing...">                        
+                 <apex:facet name="stop">                               
+                  <apex:outputPanel >                                        
+                  <apex:outputText style="font-style:bold" value="You have selected the following Rules."/></p>                                        
+                  <apex:dataList value="{!selectedRules}" var="c">{!c}</apex:dataList>                                       
+                   <apex:outputText style="font-style:bold" value="You have selected the following Agents."/></p>                                       
+                    <apex:dataList value="{!selectedAgents}" var="c">{!c}</apex:dataList>                                
+                    </apex:outputPanel>                        
+                    </apex:facet>               
+                     </apex:actionstatus>       
+                      </apex:outputPanel>        --> 
+                       </apex:page>

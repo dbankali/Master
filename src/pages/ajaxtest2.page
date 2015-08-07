@@ -1,0 +1,45 @@
+<apex:page >
+
+<script src="/soap/ajax/17.0/connection.js" type="text/javascript"></script>
+<script>
+sforce.connection.sessionId = '{!$Api.Session_ID}';
+function setupPage() {
+ alert('Hi');
+/*alert(sforce.connection.sessionId);*/
+var output = document.getElementById("{!$Component.formID.output}");
+var startTime = new Date().getTime()
+try {
+var queryResult = sforce.connection.query("Select Id, Name, Industry From Account order by Industry limit 30");
+alert('query result --- '+queryResult );
+layoutResults(queryResult, output, startTime);
+} catch(error) {
+queryFailed(error, output);
+}
+}
+function queryFailed(error, out) {
+out.innerHTML = "<font color=red>An error has occurred:</font> <p>" + error;
+}
+function layoutResults(queryResult, out, startTime) {
+var timeTaken = new Date().getTime() - startTime;
+if (queryResult.size > 0) {
+var output = "";
+var rec = queryResult.getArray('records');
+alert('Rec--   '+rec);
+for (var i = 0; i < rec.length; i++) {
+var account = rec[i];
+output += account.Id + " " + account.Name + " [Industry - "+ account.Industry + "]<BR>";
+}
+out.innerHTML = output + "<BR> query complexted in: " + timeTaken + " ms.";
+} else {
+out.innerHTML = "No records matched.";
+}
+}
+</script>
+
+<apex:form id="formID"> 
+<apex:commandButton value="click me" onclick="setupPage();" rerender="output1"/>
+<apex:outputPanel id="output"></apex:outputPanel>
+<apex:outputPanel id="output1"></apex:outputPanel>
+<!--<div id="output"></div>-->
+</apex:form>
+</apex:page>

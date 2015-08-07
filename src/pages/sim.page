@@ -1,0 +1,5 @@
+<apex:page >
+<apex:form >
+  <apex:outputLink value="http://localhost:8080/SIMNew/TempSimJsp.jsp">Link</apex:outputLink>>
+  </apex:form>
+</apex:page>

@@ -1,0 +1,22 @@
+<apex:page standardController="MileStone__c" extensions="MileStone">
+  <apex:form >
+  <apex:pageBlock title="MileStone Edit">
+  <apex:pageblockSection >
+  <apex:inputField id="opportunity" value="{!MileStone__c.Opportunity__c}"/>
+ <b> <apex:outputLabel title="Owner" value="Owner">&nbsp;&nbsp;&nbsp;{!$User.Firstname}</apex:outputLabel><br/></b>
+  <apex:inputField id="mileStoneNumber" value="{!MileStone__c.MileStoneNumber__c}"/><br/>
+  <apex:inputField id="status" value="{!MileStone__c.Status__c}"/><br/>
+  <apex:inputField id="completedDate" value="{!MileStone__c.Completed_Date__c}"/><br/>
+  <apex:inputField id="company" value="{!MileStone__c.Company__c}"/><br/>
+  <apex:inputField id="ForecastComplDate" value="{!MileStone__c.Forecast_Compl_Date__c}"/><br/>
+  <apex:inputField id="milestonedetails" value="{!MileStone__c.MileStone_Details__c}"/><br/>
+  <apex:inputField id="Estimatednextmilestonedate" value="{!MileStone__c.Estimated_next_Milestone_date__c}"/><br/>
+  <apex:inputField id="listofactivities" value="{!MileStone__c.List_of_Activities__c}"/><br/>
+  </apex:pageblockSection>
+  <apex:pageBlockButtons >
+  <apex:commandButton value="Save" action="{!save}"/>
+   <apex:commandButton value="Cancel" action="{!cancel}"/>
+  </apex:pageBlockButtons>
+  </apex:pageBlock>
+  </apex:form>
+</apex:page>

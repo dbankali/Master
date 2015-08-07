@@ -1,0 +1,14 @@
+<apex:page >
+  <apex:listViews type="Account">
+  <apex:facet name="header">
+    </apex:facet>
+  </apex:listViews>
+  <apex:tabPanel >
+  <apex:tab label="tab1">
+  </apex:tab>
+  <apex:tab label="tab2">
+  </apex:tab>
+  </apex:tabPanel>   
+  <apex:image url="{!$Resource.Image1}" width="500" height="500" />
+   <apex:iframe src="http://www.salesforce.com" scrolling="true" id="theIframe"/>
+  </apex:page>

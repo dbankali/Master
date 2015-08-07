@@ -1,0 +1,25 @@
+<apex:page controller="Scenario" title="What-If Analysis:Scenario" sidebar="false">
+  <apex:form >
+              <B>If</B> <apex:selectList value="{!selectedmetric}" size="1" >
+                        <apex:selectOptions value="{!metrictypes}"/>
+                </apex:selectList><p/>
+                <apex:selectList value="{!selectedcriteria}" size="1" >
+                        <apex:selectOptions value="{!criteria}"/>
+                </apex:selectList><p/>
+                <apex:inputText title="Percentage" value="{!percent}"></apex:inputText>%</P>
+                <apex:selectList value="{!selectedoption}" size="1" >
+                        <apex:selectOptions value="{!options}"/>
+                </apex:selectList><p/>
+                <apex:commandButton value="Generate" action="{!test}" rerender="out" status="status"/>
+                <apex:outputPanel id="out">
+                <apex:actionstatus id="status" startText="testing...">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >                                        
+                                        <apex:dataList value="{!commission}" var="c">a:{!c}</apex:dataList>
+                                </apex:outputPanel>
+                        </apex:facet>
+                </apex:actionstatus>
+        </apex:outputPanel>
+
+        </apex:form>  
+</apex:page>

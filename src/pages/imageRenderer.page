@@ -1,0 +1,16 @@
+<!-- All of these images render fine without the renderAs="pdf" attribute -->
+<apex:page renderAs="pdf">
+  <h1>Congratulations</h1>
+  This is your new Page: ImageTest
+  <p/>
+  <!-- Doesn't render in pdf -->
+  <apex:image style="border:thin solid black" value="http://www.google.com/intl/en_ALL/images/logo.gif"></apex:image>
+  <p/>
+  <apex:image value="http://dougchasman-developer-edition.na4.force.com/resource/Dutchco__exampleImage"/>
+  <!-- Oddly enough renders in pdf -->
+  <apex:image style="border:thin solid black" value="http://www.salesforce.com/common/assets/images/logo_hm_summ_nosoftware.gif"></apex:image>
+  <p/>
+  <!-- Renders in pdf (obviously if you have the resource "vheader" defined for your org -->
+ <!-- <apex:image style="border:thin solid black" url="{!$Resource.vheader}"></apex:image>-->
+  <p/>
+</apex:page>

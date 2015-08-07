@@ -1,0 +1,5 @@
+<apex:page sidebar="false" controller="GoogleMapController" >
+
+<c:googlemap mapType="normal" mapkey="{!forcekey}" data="{!geoDataTable}"/> 
+
+</apex:page>

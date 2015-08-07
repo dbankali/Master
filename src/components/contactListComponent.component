@@ -1,0 +1,108 @@
+<apex:component controller="ContactListController">
+ <!--<apex:page controller="ContactListController" sidebar="false">-->
+<apex:form >
+<style>
+.rowHeaderClass{background:#CCCCCC}
+.rowOddClass{background:#FFFFFF}
+.rowEvenClass{background:#CCCCD0}
+</style>
+<script src="/soap/ajax/13.0/connection.js"></script> 
+
+<script src="/soap/ajax/13.0/apex.js"></script>
+
+<script>
+
+/* This method is used to select 
+
+       or deselect all checkboxes*/
+
+function selectordeselect(field,box){
+         //alert("inside");
+        if(box.checked){
+          for(i=0;i < field.length;i++){           
+            field[i].checked = true;
+          }
+        }else if(!box.checked){
+            for(i=0;i < field.length;i++)
+               field[i].checked = false;
+         }
+   }
+      
+   </script>
+   <!--<apex:pageBlock title="Contact Lists">-->
+   <apex:commandLink >Delete</apex:commandLink>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <apex:commandLink >DownLoad To Excel</apex:commandLink>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <table border="0">
+   <th>Contact Lists</th>
+   <tr class="rowHeaderClass">
+   <td width="300px"><input type="checkbox" name="listMaster"  id="listMaster" onclick="selectordeselect(document.getElementsByName('contactList'),document.getElementById('listMaster'));"/>&nbsp;<b>List</b>
+   </td>
+   <td width="200px"><b>Comments</b>
+   </td>
+   <td width="100px"><b>Access</b>
+   </td>
+   <td width="100px"><b># of Contacts</b>
+   </td>
+   </tr>
+    <tr>
+   <apex:datatable value="{!ContactLists}" var="cList" rules="row" columns="4" columnsWidth="300px,200px,100px,100px" rowClasses="rowOddClass,rowEvenClass">
+    <td><apex:column >
+   <input type="checkbox" name="contactList" value="{!cList.List_Name__c}"/>
+        <apex:commandLink action="{!contactsList}" rerender="contactsTable">
+            {!cList.List_Name__c}
+            <apex:param name="id" value="{!cList.id}"/>
+            </apex:commandLink>   
+           
+   </apex:column></td>
+   <td><apex:column >
+     {!cList.Comments__c}   
+   </apex:column></td>>
+   <td><apex:column >
+     {!cList.Access__c}   
+   </apex:column></td>
+  <td> <apex:column >
+     {!cList.no_of_contacts__c}
+   </apex:column></td> 
+   
+   </apex:datatable></tr>
+   </table>
+   <apex:outputPanel id="contactsTable" title="Contacts">
+    <apex:datatable value="{!Contacts}" var="contact" rendered="{!panelDisplay}" columnsWidth="200px,300px,100px" rowClasses="rowOddClass,rowEvenClass" styleClass="rowHeaderClass">
+       <apex:column headervalue="Name">{!contact.Name__c}</apex:column>
+       <apex:column headerValue="Address">{!contact.Address__c}</apex:column>
+       <apex:column headerValue="Country">{!contact.Country__c}</apex:column>
+    </apex:datatable>
+   
+   </apex:outputPanel>
+   <!--<apex:outputPanel id="contacts">-->
+   <script>
+  /*   function getContactsList(){
+         sforce.connection.sessionId = "{!$Api.Session_ID}";
+         try{
+
+        //sforce.connection.login("admin@applabde364.com", "anil1Nvx0U7DbnjJ19diXfyi6oHuU");
+
+        var result = sforce.apex.execute('ItemLocationInsert','insertItemloc',{items:itemArray,locations:locationArray});
+
+        alert(result);
+
+        }catch(error){       
+
+          alert(error);
+
+        }
+
+
+     
+     }*/
+   </script>
+  <!-- <apex:detail subject="{!$CurrentPage.parameters.id}" relatedList="true" title="false"/>-->
+   
+  <!-- </apex:outputPanel>-->
+   
+  <!-- </apex:pageBlock>-->
+   
+
+</apex:form>
+
+</apex:component>

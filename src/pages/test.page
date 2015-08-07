@@ -1,0 +1,15 @@
+<apex:page controller="exampleCon">
+        <apex:form >
+               <apex:outputPanel id="renderflag"> 
+                <apex:outputPanel rendered="{!Not(flag)}" >
+                              abcdef
+                </apex:outputPanel>
+                </apex:outputPanel>
+
+                <apex:outputText value="Counter: {!count}" id="counter"/>
+                <apex:actionPoller action="{!incrementCounter}" interval="5" rerender="counter"/>
+                <apex:commandButton action="{!trialmeth}" rerender="renderflag" value="Test"/>
+                        </apex:form>
+                 
+
+</apex:page>

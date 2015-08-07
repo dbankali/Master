@@ -1,0 +1,35 @@
+<apex:page controller="CaseHistoryCon" showHeader="false" renderas="pdf">
+    <apex:stylesheet value="{!$Resource.printcss}"/>
+    <apex:panelGrid columns="2" width="100%">
+        <apex:panelGroup >
+            <apex:outputText value="Case History Report: {!case.casenumber}" styleClass="title"/>
+            <apex:outputText value="{!case.subject}" styleClass="caseDetail"/>
+        </apex:panelGroup>
+        <apex:image value="{!$Resource.logo}"/>
+    </apex:panelGrid>
+    <apex:variable value="{!0}" var="m"/>
+    <apex:variable value="{!0}" var="d"/>
+    <apex:repeat value="{!histories}" var="h">
+        <apex:outputPanel layout="block" rendered="{!m != h.dtmonth}" styleClass="month">
+            <apex:outputText value="{!h.dtmonthyr}"/>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" rendered="{!d != h.dtday}" styleClass="day">
+            <apex:outputText value="{!h.dtdayfmt}"/>
+        </apex:outputPanel>
+        <apex:panelGrid columns="2" styleClass="items" columnClasses="time, data">
+            <apex:outputText value="{!h.dttime}"/>
+            <apex:panelGroup >
+                <apex:outputText value="{!h.actorname}: "/>
+                <apex:outputText value="{!h.historyType}"/>
+            </apex:panelGroup>
+            <apex:outputText value=""/>
+            <apex:panelGroup >
+                <apex:outputText value="(public) " rendered="{!h.ispublic}"/>
+                <apex:outputText value="{!h.fr}:" rendered="{!h.fr <> ''}"/>
+                <apex:outputText value="{!h.to}"/>
+            </apex:panelGroup>
+        </apex:panelGrid> 
+        <apex:variable value="{!h.dtmonth}" var="m"/>
+        <apex:variable value="{!h.dtday}" var="d"/>
+    </apex:repeat>
+</apex:page>

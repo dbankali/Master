@@ -1,0 +1,63 @@
+<apex:page >
+<script>
+ /* function category1(){
+alert(" Inside category");
+  try{
+       
+       sforce.sessionId = getCookie('sid'); 
+       sforce.connection.sessionId=sforce.sessionId;
+      var result = sforce.connection.query("select id,Category_Name__c, Category_Id__c from Category__c");
+      var records = result.getArray("records");
+      for (var i=0; i < records.length; i++) {
+       if(i==(records.length-1)){
+        myString = myString + '[' ;
+        myString = myString +'\''+ records[i].Category_Name__c+'\',';
+        myString = myString +'\''+ records[i].Category_Id__c+'\'';
+        myString = myString + ']';
+      }else{
+         myString = myString + '[' ;
+        myString = myString +'\''+ records[i].Category_Name__c+'\',';
+        myString = myString +'\''+ records[i].Category_Id__c+'\'';
+        myString = myString + '],';
+         }          
+       }
+       
+       alert(myString);
+     }catch(error){
+       alert(error);
+     }
+     return myString;
+}
+function category(){
+alert("one");
+var dat = category1();
+alert("Data"+dat);
+
+}*/
+function category(){
+       var cat =  new Array();
+       try{
+       
+       sforce.sessionId = getCookie('sid'); 
+       sforce.connection.sessionId=sforce.sessionId;
+      var result = sforce.connection.query("select id,Category_Name__c, Category_Id__c from Category__c");
+      var records = result.getArray("records");
+      for (var i=0; i < records.length; i++) {
+        cat[i] = new Array();
+         cat[i][0] = records[i].Category_Name__c;
+         cat[i][1] = records[i].Category_Id__c;      
+      }
+      alert(cat);
+      
+}catch(error){
+  alert(error);
+  }return cat;
+  }
+</script>
+<apex:form >
+<apex:pageBlock id="block">
+<apex:commandButton value="Click" onclick="category();" rerender="block">
+</apex:commandButton>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

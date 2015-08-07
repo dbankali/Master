@@ -1,0 +1,48 @@
+<apex:page controller="ReplenishLoc" sidebar="false" showHeader="true">
+        <apex:sectionHeader title="Replenish Items" subtitle="Select multiple Items to multiple Locations." description="" ></apex:sectionHeader>
+        <apex:form >
+            <apex:pageBlock title="">                
+                <apex:outputPanel id="out1">
+                   <apex:actionstatus id="status1" startText="">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <h1>
+                                          <apex:outputText style="font-style:bold" value="{!message}"></apex:outputText>
+                                        <p/>
+                                        </h1>
+                                </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel>
+                
+                    <apex:pageblockSection title="Items" columns="0" id="pbs">
+                            <apex:selectList value="{!selectedItems}" multiselect="true">
+                             <apex:selectOptions value="{!items}"/><br/> 
+                            </apex:selectList>
+                        <apex:selectList value="{!selectedItems2}">
+                                <apex:selectOptions value="{!selItemsoptions}"/><br/>
+                        </apex:selectList>
+                        <apex:commandButton action="{!moveRightItems}" rerender="pbs" value="MoveRight"></apex:commandButton>
+                        
+
+                         </apex:pageblockSection>
+                     
+
+                                   <apex:pageblockSection title="Locations">
+                                  <apex:selectList value="{!selectedLocations}">
+                            <apex:selectOptions value="{!locations}"/><br/></p>
+                    </apex:selectList><br/></p>
+                </apex:pageblockSection>
+                
+                                             
+                <apex:pageblockButtons >
+                    <apex:commandButton value="Submit" action="{!save}" rerender="out1" status="status1"></apex:commandButton>
+                </apex:pageblockButtons>  
+               
+              </apex:pageBlock> 
+                      </apex:form>
+                      <apex:pageBlock title="Item Location Related List">
+              <apex:relatedList list="Item_Location__c" subject="{!$CurrentPage.parameters.id}"></apex:relatedList>
+              </apex:pageBlock>
+
+          </apex:page>

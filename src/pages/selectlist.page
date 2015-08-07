@@ -1,0 +1,23 @@
+<apex:page controller="sampleCon">
+        <apex:form >
+                <apex:selectList value="{!myitems}" multiselect="true">
+                        <apex:selectOptions value="{!allitems}"/>
+                </apex:selectList><p/>
+                <apex:selectList value="{!mylocations}" multiselect="true">
+                        <apex:selectOptions value="{!alllocations}"/>
+                </apex:selectList><p/>
+
+                <apex:commandButton value="Test" action="{!test}" rerender="out" status="status"/>
+        </apex:form>
+        <apex:outputPanel id="out">
+                <apex:actionstatus id="status" startText="testing...">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <p>You have selected:</p>
+                                        <apex:dataList value="{!myitems}" var="c">{!c}</apex:dataList><br/>
+                                        <apex:dataList value="{!mylocations}" var="d">{!d}</apex:dataList>
+                                </apex:outputPanel>
+                        </apex:facet>
+                </apex:actionstatus>
+        </apex:outputPanel>
+  </apex:page>

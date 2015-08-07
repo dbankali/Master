@@ -1,0 +1,296 @@
+<!--
+By Appirio (c) 2007-2008
+Author: Appirio
+
+1.10 7/18/2007 Gracefully handle HTML tags in cell values
+1.11 7/20/2007 Add cool iframe resize function to eliminate inner scrollbars
+1.12 8/21/2007 Tweaked iframe resize; load by default with query text selected
+1.13 8/27/2007 Resize iframe after desc() call
+1.14 3/25/2008 Added checkbox option to only show table result, or only raw result
+1.15 3/26/2008 Added query timing
+2.0  2/20/2009 Convert S-Control to Visualforce Page & add sorting functionality
+-->
+<apex:page >
+    <!-- For Ajax API Calling -->   
+    <script language="javascript" src="/soap/ajax/14.0/connection.js" type="text/javascript"></script>
+    <!--Javascript helper file to enable sorting of HTML tables -->
+    <script language="javascript" src="{!$Resource.SortTable}/sortTable.js" type="text/javascript"></script>
+    <div align="right"><apex:image value="{!$Resource.AppirioLogo}" alt="Powered by: Appirio"/></div>
+    <apex:pageBlock id="block1" title="Appirio SOQL Query Tool" >
+        <apex:form onSubmit="runQuery();return false;" id="runQuery">
+            <apex:outputLabel >&nbsp;&nbsp;&nbsp;Your query:</apex:outputLabel> 
+            <apex:pageBlockSection id="section1">
+                <apex:inputTextArea rows="6" cols="140" id="queryString"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="section2" columns="12">
+              <apex:pageBlockSectionItem >
+                    <apex:commandButton value="Go" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="section2Item1" dir="LTR">
+                    <apex:inputCheckbox id="showTableResult"/>
+                     <apex:outputLabel for="showTableResult" style="white-space:nowrap;">&nbsp;Show result as table</apex:outputLabel> 
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="section2Item2">
+                    <apex:inputCheckbox id="showRawResult"/>
+                    <apex:outputLabel for="showRawResult" style="white-space:nowrap;">&nbsp;Show raw SOQL result</apex:outputLabel>
+                </apex:pageBlockSectionItem>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <apex:pageBlockSectionItem >
+                    <apex:commandLink value="Enlarge textarea" style="white-space:nowrap;" onclick="javascript:enlargeTextarea();return false;" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+           </apex:form>
+        <div id='result' style="left:100px;top:100px;width:760px;overflow:auto">&nbsp;</div>
+    </apex:pageBlock>
+    <style>.codeStyle{font-family: courier new, courier, sans-serif; font-size:11px;}</style>
+    <apex:outputPanel ><br/><br/>
+        <i>Tip: Try <span class="codeStyle">DESC objectName</span> for a list of fields for that object.</i><br />
+        <i>Tip: Try <span class="codeStyle">SELECT * FROM objectName</span> to select all fields.</i><br />
+        <i>Note: Database query time only includes time for the sforce.connection.query() call. It does not include HTML rendering time.</i><br /><br />
+        <i>Appirio SOQL Query Tool,(c) Appirio 2007-2009. Version 2.0, uses SFDC API 15.0.</i>  
+    </apex:outputPanel>
+    <!-- Java Scriptiong -->
+    <script type="text/javascript">
+        sforce.connection.sessionId = '{!$Api.Session_ID}';
+        var queryStringVar = document.getElementById("{!$Component.block1.runQuery.section1.queryString}");
+        var runQueryVar = document.getElementById("{!$Component.block1.runQuery}");
+        if(queryStringVar.value == '')
+            queryStringVar.value="SELECT id, lastname, firstname, account.id, account.name FROM contact LIMIT 100";
+        var thisIsADescribeCall = false;
+        var prevFramesWidth = 0; // used to dynamically resize iframe to avoid internal scrollbars
+        var queryStartTime = 0;
+
+        //Funtion for Triming Text
+        function trim(inString){
+            return inString.replace(/^\s+/,'').replace(/\s+$/,'');
+        }
+        //Function for Validating SOQL Result Fields
+        function validSOQLResultField(testField) {
+            if (thisIsADescribeCall) { // DescribeSObjects() returns a bunch of stuff; we only want a few columns
+                if (testField == "label") return true;
+                if (testField == "length") return true;
+                if (testField == "name") return true;
+                if (testField == "custom") return true;
+                if (testField == "type") return true;
+            return false;
+            }
+            if (testField == "type") return false;
+            if (testField == "toXml") return false;
+            if (testField == "writeValue") return false;
+            if (testField == "get") return false;
+            if (testField == "set") return false;
+            if (testField == "getArray") return false;
+            if (testField == "getBoolean") return false;
+            if (testField == "getDate") return false;
+            if (testField == "getDateTime") return false;
+            if (testField == "getInt") return false;
+            if (testField == "getFloat") return false;
+            if (testField == "getBase64Binary") return false;
+            if (testField == "toString") return false;
+            return true;
+        }
+        
+        function displayTableHeaderLabel(cellLabel, cellValue, valueSoFar) {
+            // figure out the row header names, based on the 1st row of values.
+            // the unusual parameter "valueSoFar" is needed since this function is recursive - we may have to
+            // build the eventual value of a header label, piece-by-piece.
+            var returnHTML = "";
+            if (valueSoFar != null)
+                valueSoFar += "."; // display related objects using dot notation, e.g. Account.Object
+            else
+                valueSoFar = "";
+            if (validSOQLResultField(cellLabel)) {
+                if (cellValue) {
+                    if (cellValue.toString().substring(0,6) == "{type:") { // looks like a related object
+                        for (k in cellValue) {
+                            returnHTML += displayTableHeaderLabel(k, cellValue[k], valueSoFar + cellLabel); // recursive call - handles many layers of related objects
+                        }
+                    } else {
+                        returnHTML += "<th>" + valueSoFar + cellLabel + "</th>";
+                    }
+                } else {
+                    returnHTML += "<th>" + valueSoFar + cellLabel + "</th>";
+                }
+            }
+            return returnHTML;
+        }
+
+
+        function displayCellValue(cellLabel, cellValue) {
+            var returnHTML = "";
+            var k;
+            if (validSOQLResultField(cellLabel)) {
+                if (cellValue) {
+                    if (cellValue.toString().substring(0,6) == "{type:") { // looks like a related object
+                        for (k in cellValue) {
+                            returnHTML += displayCellValue(k, cellValue[k]); // recursive call - handles many layers of related objects
+                        }
+                    } else {
+                    // it's not a related object... it's just a plain old field
+                        if (cellLabel == "Id") {
+                            //returnHTML += "<td>"+ htmlEscape(cellValue)  + "</td>";
+                            returnHTML += "<td><a href=\'/" + cellValue + "\' target=\'_blank\'>" + cellValue + "</td>";
+                        } else {
+                            if (cellValue.toString().substring(0,6) == "{done:") { // looks like a list of objects in the cell (the result of a subquery)
+                                returnHTML += "<td>" + generateResultsTable(cellValue.getArray("records")) + "</td>";
+                            } else {
+                                returnHTML += "<td>" + htmlEscape(cellValue) + "</td>";
+                            }
+                        }
+                    }
+                } else {
+                    // cell is null
+                    returnHTML += "<td></td>";
+                }
+            }
+            return returnHTML;
+        }
+
+
+        function generateResultsTable(records) {
+            var returnHTML = "";
+            var i = 0;
+            var j;
+
+            // write out table header
+            if (records.length > 0) {
+                returnHTML = returnHTML + "<table id=table0 class= detailList><tr style=\'background-color:#ccc;font-weight:bold;font-style:underline;font-size:9pt;border-bottom:1px solid #000000;\'>";
+                returnHTML += "<th style=border-bottom:1px solid #000000;>Row</th>";
+                for (j in records[0]) {
+                     returnHTML += displayTableHeaderLabel(j, records[0][j]);
+                }                
+                returnHTML += "</tr>";
+            }
+            // write out cell values for each row
+            for (i = 0; i < records.length; i++) {
+                returnHTML += "<tr><td>" + (i + 1) + "</td>";
+                for (j in records[i]) {
+                    returnHTML += displayCellValue(j, records[i][j]);
+                }
+                returnHTML += "</tr>";
+            }
+            returnHTML += "</table>";
+            return returnHTML;
+        }
+
+
+        function htmlEscape(string) {
+            // escape HTML characters, so the string appears in inline HTML with HTML tags, as opposed to rendered HTML.
+            var newString = string.replace(/>/g, "&gt;");
+            newString = newString.replace(/</g, "&lt;");
+            return newString;
+        }
+
+        function convertSelectStarQuery(queryString) {
+            // if a query starts with "SELECT *", replace the * with the actual list of fields
+            // figure out object name
+            var startOfObjectName = queryString.toUpperCase().indexOf("FROM") + 5;
+            while (queryString.charAt(startOfObjectName) == " ") {
+                startOfObjectName++;
+            }
+            var firstSpaceAfterObjectName = queryString.indexOf(" ", startOfObjectName);
+            var objectName = "";
+            if (firstSpaceAfterObjectName == -1)
+                objectName = queryString.substr(startOfObjectName);
+            else
+                objectName = queryString.substring(startOfObjectName, firstSpaceAfterObjectName);
+            objectName = trim(objectName);
+
+            // get a list of fields for that object
+            var describeSObjectResult;
+            try {
+                describeSObjectResult = sforce.connection.describeSObjects([objectName]);
+            } catch (error) {
+                document.getElementById("result").innerHTML = "<br /><span style=\'color:red\'>SFDC query returned an error: <br /><br />" + error + "</style><br /><br />";
+                return "";
+            }
+            var fieldArray = describeSObjectResult[0].getArray("fields");
+            var fieldString = "";
+            for (i=0; i < fieldArray.length; i++) {
+                if (i > 0)
+                    fieldString += ", ";
+                fieldString += fieldArray[i].get("name");
+            }
+            queryString = "SELECT " + fieldString + queryString.substr(8);
+            return queryString;
+        }
+
+
+        function runQuery() {
+            var rawResultVar = document.getElementById('{!$Component.block1.runQuery.section2.section2Item2.showRawResult}');
+            var tableResultVar = document.getElementById('{!$Component.block1.runQuery.section2.section2Item1.showTableResult}');
+            document.getElementById("result").innerHTML ="<br /><span style=\'color:blue\'>Please wait, running query...</span><br /><br /><br />";
+            var queryString = queryStringVar.value;
+            // see if this is a DESC call
+            if (queryString.substr(0,4).toUpperCase() == 'DESC') {
+                thisIsADescribeCall = true;
+                var objectName = queryString.substr(5);
+                var describeSObjectResult;
+               try {
+                    describeSObjectResult = sforce.connection.describeSObjects([objectName]);
+                } catch (error) {
+                    document.getElementById("result").innerHTML = "<br /><span style=\'color:red\'>SFDC query returned an error: <br /><br />" + error + "</style><br /><br />";
+                    return;
+                }
+                var resultHTML = "";
+                if (rawResultVar.checked) {
+                    resultHTML += "Raw SOQL result:<br /><br />";
+                    resultHTML += describeSObjectResult + "<br /><br />";
+                }
+               
+                resultHTML += generateResultsTable(describeSObjectResult[0].getArray("fields"));
+                document.getElementById("result").innerHTML = resultHTML;
+                //resizeIframe();
+                return;
+            }
+            // see if this is a "SELECT *" call
+            if (queryString.substr(0,8).toUpperCase() == 'SELECT *') {
+                queryString = convertSelectStarQuery(queryString);
+                    if (queryString == "") return; // error handling is already taken care of by convertSelectStarQuery()
+                        queryStringVar.value = queryString;
+            }
+            
+            // regular SOQL query, just submit it to SFDC asynchronously
+            thisIsADescribeCall = false;
+            queryStartTime = new Date().getTime();
+            var result = sforce.connection.query(queryString,{onSuccess:processQueryResults,onFailure:showQueryError});
+        }
+
+
+        function processQueryResults(queryResult) {
+            // callback function when SOQL query returns from SFDC successfully
+            var rawResultVar = document.getElementById('{!$Component.block1.runQuery.section2.section2Item2.showRawResult}');
+            var tableResultVar = document.getElementById('{!$Component.block1.runQuery.section2.section2Item1.showTableResult}');
+            var queryEndTime = new Date().getTime();
+            var queryTimeElapsed = (queryEndTime - queryStartTime);
+            var resultHTML = "";
+            var records = queryResult.getArray("records");
+            resultHTML += "<br />Number of records returned: " + queryResult.size + ", database query time: " + queryTimeElapsed/1000 + " sec<br /><br />";
+
+            if (rawResultVar.checked) {
+                resultHTML += "Raw SOQL result:<br /><br />";
+                resultHTML += queryResult + "<br /><br />";
+            }
+
+            if (tableResultVar.checked)
+                resultHTML += generateResultsTable(records);
+
+            document.getElementById("result").innerHTML = resultHTML;
+            //Make Table Sortable so, calling method and pass ID of a Table
+            initTable("table0");
+        }
+
+        function showQueryError(error) {
+            // callback function when SOQL query returns from SFDC with a failure
+            document.getElementById("result").innerHTML = "<br /><span style=\'color:red\'>SFDC query returned an error: <br /><br />" + error + "</style><br /><br />";
+        }
+        
+        function enlargeTextarea() {
+            var currentHeight = queryStringVar.rows;
+            queryStringVar.rows = currentHeight + 2;
+        }
+
+        //By default It is Checked on Load
+        document.getElementById('{!$Component.block1.runQuery.section2.section2Item1.showTableResult}').checked=true;
+    </script>
+   <!-- For Keep Text in Single Line using nowrap functionality -->   
+</apex:page>

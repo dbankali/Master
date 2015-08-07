@@ -1,0 +1,66 @@
+<apex:page controller="MyController1">
+<apex:form >
+<script src="/soap/ajax/12.0/connection.js"></script> 
+<script src="/soap/ajax/13.0/apex.js"></script> 
+<script>
+function selectordeselect(field,box){
+//field = document.getElementsByName("accountnames");
+alert("field"+ field);
+alert("field[0]" + field[0]);
+//box = document.getElementById("master");
+if(box.checked){
+for(i=0;i<field.length;i++){
+field[i].checked = true ;
+}
+}else if(!box.checked){
+
+   for(i=0;i<field.length;i++)
+field[i].checked = false ;
+}
+}
+function store(){
+   var err;
+   var acc = new Array();
+   var val = new Array();
+   var j=0;
+   acc = document.getElementsByName("accountnames");
+   for(i=0;i<acc.length;i++){            
+           if(acc[i].checked){
+           alert(acc[i].value);
+                      val[j] = acc[i].value;
+                      j=j+1;
+           }
+     }
+     alert(acc);
+     alert(val);
+               //var result = sforce.SObject("Account");
+     try{
+      var result = sforce.apex.execute("HelloWorld2","selected",{s:val});
+      alert("result:"+result);
+              }catch(err){
+        alert("Error")
+     }
+     
+     }
+</script>
+<apex:pageBlock id="pageblock">
+<input type="checkbox" name="master" id="master" onclick="selectordeselect(document.getElementsByName('accountnames'),document.getElementById('master'));">Select All Accounts<br/>
+<apex:pageblockSection title="Accounts" id="pageblocksec">
+<apex:datatable value="{!account}" var="acc">
+<apex:column >
+<input type="checkbox" value="{!acc.name}" name="accountnames">{!acc.name}
+</apex:column>
+</apex:datatable>
+</apex:pageblockSection>
+<apex:commandButton onclick="store();" value="Submit" rerender="outblock"></apex:commandButton>
+</apex:pageBlock>
+<apex:pageBlock id="hidden" rendered="false">
+</apex:pageBlock>
+<apex:pageBlock title="Selected Items" id="outblock">
+<apex:pageBlockTable value="{!selectedAcc}" var="selacc">
+<apex:column >{!selacc}
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

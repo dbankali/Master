@@ -1,0 +1,15 @@
+<apex:page controller="inputController">
+<apex:form >
+<apex:inputText value="{!name}"/>
+</apex:form>
+<apex:outputPanel >
+<apex:pageBlock >
+{!name1}
+</apex:pageBlock>
+<apex:image url="http://picasaweb.google.com/anilkumar.pasha/Screenshots#5361896204159472914"/>
+</apex:outputPanel>
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: input
+  <!-- End Default Content REMOVE THIS -->
+  </apex:page>

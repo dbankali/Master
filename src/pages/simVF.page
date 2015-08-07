@@ -1,0 +1,92 @@
+<apex:page controller="simdata">
+ <html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+   <h3>Welcome to our Own Created From:</h3><br>
+   <br>
+   <br>
+   <apex:form >
+   
+   <table>
+   <tr>
+   <td>
+   Login :
+   </td>
+   <td>
+   <apex:inputText value="{!login}"></apex:inputText>
+  <!-- <input type='text' name='login' value='6zz6m5N4Et' style='width:300;'>-->
+   </td>
+   </tr>
+   <tr>
+   <td>
+   Trans. Key :
+   </td>
+   <td>
+   <apex:inputText value="{!trans_key}"></apex:inputText>
+   <!--<input type='text' name='tansKey' value='9V9wUv6Yd92t27t5' style='width:300;'>-->
+   </td>
+   </tr>
+   <tr>
+   <td>
+   Type :
+   </td>
+   <td>
+   <apex:inputText value="{!atype}"></apex:inputText>
+   <!--<input type='text' name='type' value='AUTH_CAPTURE' style='width:300;'>-->
+   </td>
+   </tr>
+   <tr>
+   <td>
+   Amount :
+   </td>
+   <td>
+   <apex:inputText value="{!amount}"></apex:inputText>
+   <!--<input type='text' name='amount' value='19.99' style='width:300;'>-->
+   </td>
+   </tr>
+   <tr>
+   <td>
+   Card No. :
+   </td>
+   <td>
+   <apex:inputText value="{!card_no}"></apex:inputText>
+   <!--<input type='text' name='cardNo' value='4007000000027' style='width:300;'>-->
+   </td>
+   </tr>
+   <tr>
+   <td>
+   Exp. Date :
+   </td>
+   <td>
+   <apex:inputText value="{!exp_date}"></apex:inputText>
+   <!--<input type='text' name='expDate' value='0509' style='width:300;'>-->
+   </td>
+   </tr>
+   <br/>
+   <br/>
+   <br/>
+   <tr>
+   <td>
+  <apex:commandButton action="{!post}" value="submit" rerender="out1"></apex:commandButton>
+   </td>
+   </tr>
+   </table>
+   <apex:outputPanel id="out1">
+                   <apex:actionstatus id="status1" startText="">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <h1>
+                                          <apex:outputText style="font-style:bold" value="{!response}"></apex:outputText>
+                                        <p/>
+                                        </h1>
+                                </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel>
+
+   </apex:form>   
+</body>
+</html>
+</apex:page>

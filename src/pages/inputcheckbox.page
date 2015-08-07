@@ -1,0 +1,45 @@
+<apex:page controller="inputcheckBox">
+<apex:form >
+<apex:pageBlock title=" Replenish items in Locations">
+<script>
+var arrdata = [];
+</script>
+    <apex:repeat value="{!item}" var="ad">
+  <!-- Pushing item into Javascript array -->
+  <script>arrdata.push("{!ad}");</script>
+</apex:repeat>
+<apex:commandButton value="Submit" rerender="page,block"></apex:commandButton>
+<apex:pageBlockTable value="{!item}" var="contact" id="block">
+    <apex:column >
+        <apex:facet name="header">
+            <apex:inputCheckbox id="idMasterCheck" onclick="chkDeleteFn('{!$Component.idMasterCheck}');"/>
+        </apex:facet>  
+        <script>
+           var bool = false;
+    function chkDeleteFn(objCbMaster)
+    {
+               alert(document.getElementById(objCbMaster).checked);
+                 bool = document.getElementById(objCbMaster).checked;
+                 for(var j=0;j<arrdata.length;j++){
+                 document.getElementById('{!$Component.idCheck}').checked = true;
+                 }
+                // alert(document.getElementById('{!$Component.block}'));
+                                  
+    }
+    </script>
+               
+              <apex:inputCheckbox id="idCheck" value="{!contact.Item_Name__c}" title="{!contact.Item_Name__c}"/>
+       </apex:column>
+</apex:pageBlockTable>
+<apex:pageBlockSection id="page" title="PageBlockSection">
+  <apex:inputCheckbox id="blockCheck" title="Name"/>
+
+</apex:pageBlockSection>
+
+<!--<apex:inputcheckbox id="name" value="{!name}" title="Anil"></apex:inputcheckbox><br/>
+<apex:inputcheckbox id="name1" value="{!name1}" style="italic"></apex:inputcheckbox><br/>
+<apex:commandButton value="Submit" action="{!submit}"> </apex:commandButton><br/>
+<apex:outputText value="{!name}"></apex:outputText>-->
+</apex:pageBlock>  
+</apex:form>
+</apex:page>

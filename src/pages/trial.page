@@ -1,0 +1,9 @@
+<apex:page controller="trial">
+<apex:form >
+<apex:pageBlock >
+<apex:pageBlockSection >
+<apex:inputField value="{!input.Employee__c}" id="employee"></apex:inputField>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+  </apex:page>

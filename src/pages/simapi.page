@@ -1,0 +1,61 @@
+<apex:page controller="SimAPI">
+  
+
+<html>
+<head>
+
+<title>Insert title here</title>
+
+</head>
+<body>
+
+<h3>Final Order</h3>
+
+Description: CC AUTH ONLY<br>
+Total Amount : 19.99<br>
+<br>
+<apex:form >
+<!--<FORM method="POST" action="https://test.authorize.net/gateway/transact.dll">-->
+<!-- Uncomment the line ABOVE for test accounts OR the line BELOW for LIVE accounts-->
+<!--<FORM action="https://secure.authorize.net/gateway/transact.dll">-->
+
+<!--<INPUT TYPE="HIDDEN" NAME="x_version" VALUE="3.1">
+<apex:inputHidden id="x_version" value="{!}"></apex:inputHidden>
+
+<apex:inputHidden id="x_login" value="{!}"></apex:inputHidden>
+<apex:inputHidden id="x_show_form" value="{!}"></apex:inputHidden>
+<apex:inputHidden id="x_method" value="{!}"></apex:inputHidden>
+<apex:inputHidden id="x_amount" value="{!}"></apex:inputHidden>-->
+<!--<input type='HIDDEN' name='x_login' value='6zz6m5N4Et' style='width:300;'><br/>
+<INPUT type="HIDDEN" name="x_show_form" value="PAYMENT_FORM" style="width:300;"><br/>
+<INPUT TYPE="HIDDEN" NAME="x_method" VALUE="CC"><br/>
+<input type='HIDDEN' name='x_amount' value='19.99' style='width:300;'><br/>-->
+
+<!--<input type="text" name="x_fp_sequence" value="<%=oSeq%>" style="width:300;"><br/>
+
+<input type="text" name="x_fp_timestamp" value="<%=trTime%>" style="width:300;"><br/>
+<input type="hidden" name="x_fp_hash" value="">-->
+<!--<apex:inputHidden id="x_fp_hash" value=""></apex:inputHidden>-->
+<!--<INPUT type="submit" value="Authorize.Net  ::  Accept Order">-->
+<apex:commandButton value="submit" action="{!action}"></apex:commandButton>
+<!--</form>-->
+<apex:outputPanel id="out1">
+                   <apex:actionstatus id="status1" startText="">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <h1>
+                                          <apex:outputText style="font-style:bold" value="{!response}"></apex:outputText>
+                                        <p/>
+                                        </h1>
+                                </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel>
+
+<br>
+<br>
+<br>
+</body>
+</html>
+</apex:form>
+</apex:page>

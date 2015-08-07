@@ -1,0 +1,6 @@
+<apex:page >
+<script type="text/javascript" src="{!$Resource.includescript}"/>
+<apex:form >
+<apex:inputText onclick="javascript:method1()"/>
+</apex:form>
+  </apex:page>

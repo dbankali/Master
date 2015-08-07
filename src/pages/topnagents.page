@@ -1,0 +1,107 @@
+<apex:page controller="toporbottomAgent" sidebar="false" tabstyle="Commission_Reports__tab">
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojo/dojo.js')}"></apex:includeScript>
+<apex:sectionHeader title="Top N Agents Commission" subtitle="" description="" ></apex:sectionHeader>
+<apex:outputLink value="https://na2.salesforce.com/apex/allreportspage"> Back to: Commission Reports</apex:outputLink>
+
+<script >
+//Attempt to override JavaScript that is setting focus on Date field
+function setFocusOnLoad() {} //Or use beenFocused = true;
+</script>
+<script> var xarrTotalCommission =[]; </script>
+<script> var agentLabel =[]; </script>
+<apex:repeat value="{!topnAgents}" var="l">
+      
+      <script>
+      var t="{!l.agentName}";
+      xarrTotalCommission.push({!l.totalCommissionAmount});
+      
+      agentLabel.push(t);
+      //alert(agentLabel);
+      </script>
+      
+</apex:repeat> 
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+
+<script type="text/javascript">
+
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.blue");
+dojo.require("dojox.charting.themes.PlotKit.cyan");
+dojo.require("dojox.charting.themes.PlotKit.green");
+dojo.require("dojox.charting.themes.PlotKit.orange");
+dojo.require("dojox.charting.themes.PlotKit.purple");
+dojo.require("dojox.charting.themes.PlotKit.red");
+dojo.require("dojox.charting.themes.ET.greys");
+
+var seriesData=new Array(agentLabel.length);
+for(var i = 0; i < agentLabel.length; ++i){
+//alert(agentLabel[i]);
+var j=i+1;
+seriesData[i]=({value:j, text: agentLabel[i]});
+    
+}
+makeObjects = function(){
+    var chart1 = new dojox.charting.Chart2D("simplechart");
+    chart1.addPlot("default", {type: "StackedColumns", gap: 5});
+    chart1.addAxis("y", {vertical: true, includeZero: true});
+    chart1.addAxis("x", {minorLabels: true, 
+        labels: seriesData
+        });
+    chart1.addSeries("Series 1", xarrTotalCommission, {fill: "lightblue"});
+    chart1.render();
+    setAxisTitle(chart1,"x","Revenue",10);
+    setAxisTitle(chart1,"y","Commission",10);
+
+};
+
+dojo.addOnLoad(makeObjects);
+
+</script>
+<apex:form >
+<apex:pageBlock >
+  <apex:outputPanel id="out1">
+                   <apex:actionstatus id="status1" startText="Processing ...">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <h1>
+                                        <!--<apex:pagemessage severity="confirm" summary="{!message}" strength="1"></apex:pagemessage>-->
+                                        <apex:outputText style="font-style:bold" value="{!message}"></apex:outputText>
+                                        <p/>
+                                        </h1>
+                                </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel>
+<apex:pageBlockButtons >
+<apex:commandButton action="{!runReport}"  value="Run Report"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection title="Choose Date Range to generate Reports" collapsible="false">
+
+<apex:inputField value="{!fromDateTask.From_Date__c}" onFocus="setFocusOnLoad();" id="fromdate"/><br/>
+<apex:inputField value="{!toDateTask.To_Date__c}" id="todate"/><br/>
+<apex:inputField value="{!agentno.No_of_Agents__c}"></apex:inputField><br/>
+</apex:pageBlockSection>
+</apex:pageBlock>
+<apex:pageBlock title="Top {!inputn} Agents ORC">
+<apex:outputPanel id="commission" >
+
+<!--<apex:outputPanel id="commission" rendered="{!chartSection}">
+-->
+    
+        <apex:pageBlockTable value="{!topnAgents}" var="com">
+        <apex:column headerValue="Agent Name">{!com.agentName}</apex:column>
+        <apex:column headerValue="Basic Commission">{!com.basicCommissionAmount}</apex:column>
+        <apex:column headerValue="ORC">{!com.orcAmount}</apex:column>
+        <apex:column headerValue="Total Commission">{!com.totalCommissionAmount}</apex:column>
+        </apex:pageBlockTable>
+    
+
+</apex:outputPanel>
+<!--
+<apex:outputPanel id="chartSection" rendered="{!chartSection}">
+    <div id="simplechart" style="width: 400px; height: 200px;"></div>
+</apex:outputPanel>
+-->
+</apex:pageBlock>
+</apex:form>
+  </apex:page>

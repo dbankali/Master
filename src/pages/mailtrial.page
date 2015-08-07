@@ -1,0 +1,5 @@
+<apex:page controller="MailSample" >
+<apex:form >
+  <apex:commandButton action="{!sendmail}" value="Submit"></apex:commandButton>
+  </apex:form>
+</apex:page>

@@ -1,0 +1,87 @@
+<apex:page >
+ <html>
+<head>
+<title>Chart 2D</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+    @import "../../../dojo/resources/dojo.css";
+    @import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojo/dojo.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojox/charting/plot2d/Lines.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojox/charting/plot2d/Scatter.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojox/charting/BestFit.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojox/charting/themes/PlotKit/red.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojox/charting/themes/PlotKit/purple.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojox/charting/themes/PlotKit/blue.js')}"></apex:includeScript>
+<apex:includeScript value="{!URLFOR($Resource.MyDojo,'/dojo-release-1.1.1/dojo/do.js')}"></apex:includeScript> 
+
+<script type="text/javascript">
+var lin = new dojox.charting.plot2d.Lines();
+
+dojo.require("dojox.charting.BestFit");
+dojo.require("dojox.charting.themes.PlotKit.blue");
+dojo.require("dojox.charting.themes.PlotKit.cyan");
+dojo.require("dojox.charting.themes.PlotKit.green");
+dojo.require("dojox.charting.themes.PlotKit.orange");
+dojo.require("dojox.charting.themes.PlotKit.purple");
+dojo.require("dojox.charting.themes.PlotKit.red");
+dojo.require("dojox.charting.themes.ET.greys");
+
+makeObjects = function(){
+
+    var chart27 = new dojox.charting.BestFit("test27");
+    chart27.setTheme(dojox.charting.themes.PlotKit.purple);
+    chart27.addPlot("default", {type: "Scatter"});
+    chart27.addAxis("x", {min: 0, max: 7000, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart27.addAxis("y", {vertical: true, min: 0, max: 400, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart27.addSeries("Series A", [{x: 1000, y: 120},{x: 1500, y: 160}, {x: 1500, y: 130},{x: 2000, y: 150},{x: 2500, y: 135},{x: 3000, y: 195},{x: 3000, y: 210},{x: 3000, y: 230},{x: 4000, y: 260}, {x: 5000, y: 320},{x: 6000, y: 310},]);
+    chart27.addSeries("Series B",  [{x: 1500, y: 139}, {x: 4000, y: 233}, {x: 5000, y: 271},{x: 3000, y: 195},{x: 1000, y: 120},{x: 2000, y: 158},{x: 3000, y: 195},{x: 2500, y: 176},{x: 1500, y: 139},{x: 6000, y: 310},{x: 3000, y: 195}]);
+    chart27.render();
+    
+    var chart26 = new dojox.charting.BestFit("test26");
+    chart26.setTheme(dojox.charting.themes.PlotKit.purple);
+    chart26.addPlot("default", {type: "Scatter"});
+    chart26.addAxis("x", {min: 0, max: 7000, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart26.addAxis("y", {vertical: true, min: 0, max: 400, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart26.addSeries("Series A", [{x: 1000, y: 120},{x: 1500, y: 160}, {x: 1500, y: 130},{x: 2000, y: 150},{x: 2500, y: 135},{x: 3000, y: 195},{x: 3000, y: 210},{x: 3000, y: 230},{x: 4000, y: 260}, {x: 5000, y: 320},{x: 6000, y: 310},]);
+    chart26.addSeries("Series B",  [{x: 1500, y: 139}, {x: 4000, y: 233}, {x: 5000, y: 271},{x: 3000, y: 195},{x: 1000, y: 120},{x: 2000, y: 158},{x: 3000, y: 195},{x: 2500, y: 176},{x: 1500, y: 139},{x: 6000, y: 310},{x: 3000, y: 195}]);
+    chart26.render();
+
+
+
+    var chart28 = new dojox.charting.BestFit("test28");
+    chart28.setTheme(dojox.charting.themes.PlotKit.red);
+    chart28.addPlot("default", {type: "Default", lines: false, markers: true, tension:0});
+    chart28.addAxis("x", {min: 0, max: 7000, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart28.addAxis("y", {vertical: true, min: 0, max: 400, majorTick: {stroke: "black", length: 3}, minorTick: {stroke: "gray", length: 3}});
+    chart28.addSeries("Series A", [{x: 1500, y: 160}, {x: 4000, y: 260}, {x: 5000, y: 320},{x: 3000, y: 230},{x: 1000, y: 120},{x: 2000, y: 150},{x: 3000, y: 210},{x: 2500, y: 135},{x: 1500, y: 130},{x: 6000, y: 310},{x: 3000, y: 195}]);
+    chart28.addSeries("Series B",  [{x: 1500, y: 139}, {x: 4000, y: 233}, {x: 5000, y: 271},{x: 3000, y: 195},{x: 1000, y: 120},{x: 2000, y: 158},{x: 3000, y: 195},{x: 2500, y: 176},{x: 1500, y: 139},{x: 6000, y: 310},{x: 3000, y: 195}]);
+    chart28.render();
+   
+   
+
+    
+
+};
+
+dojo.addOnLoad(makeObjects);
+
+</script>
+</head>
+<body>
+<h1>Chart 2D</h1>
+
+<p>26: Default lines with 2D data, custom axis, red theme.</p>
+<div id="test26" style="width: 400px; height: 200px;"></div>
+<p>27: Scatter chart, custom axis, purple theme.</p>
+<div id="test27" style="width: 400px; height: 200px;"></div>
+<p>28: Markers, lines, 2D data, custom axis, blue theme.</p>
+<div id="test28" style="width: 400px; height: 200px;"></div>
+<!--<p>29: Clustered columns with positive and negative values, readable theme.</p>
+<div id="test29" style="width: 500px; height: 300px;"></div>-->
+<p>That's all Folks!</p>
+</body>
+</html>
+
+</apex:page>

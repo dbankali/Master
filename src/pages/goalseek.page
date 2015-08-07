@@ -1,0 +1,166 @@
+<apex:page controller="GoalSeek" sidebar="false" tabStyle="Rule__c">
+<style>
+                .activeTab1 {background-color:#0076c0; color:#ffffff; background-image:none}
+</style>
+<!--<apex:sectionHeader title="What-If Analysis:GoalSeek" subtitle="" description="" ></apex:sectionHeader>
+     <center>
+-->
+   
+        <apex:toolbar id="theToolbar" styleClass="activeTab1" contentClass="activeTab1"  height="25px" width="100%">
+                <apex:outputText style="font-style:bold" value="Tickets to be sold by each agent to reach target revenue" ></apex:outputText>
+        </apex:toolbar>
+<!--    </center>
+<apex:stylesheet value="{$Resource.resources_css}"/>-->
+<apex:stylesheet value="{$Resource.css_file}"/>
+<apex:form >
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<style>
+    .color_red{
+    color:red;
+    }
+    .button_1{
+background-color:#ffdd68;
+padding:1px;
+font-size:11px;
+color:#00000;
+height:22px;
+border:1px solid #d8961e;
+}
+
+.yellow_header{
+background-color:#0076c0;
+padding:5px;
+height:15px;
+color:#ffffff;
+font-size:12px;
+text-align:center;
+font-weight:bold;
+border-right:1px solid #0076c0;
+border-bottom:1px solid #0076c0;
+}
+
+.border1{
+border-top:1px solid  #0076c0;
+border-left:1px solid #0076c0;
+color:#c3771e;
+font-size:11px;
+}
+.data2{
+height:15px;
+padding:5px;
+border-bottom:1px solid #0076c0;
+border-right:1px solid #0076c0;
+font-size:11px;
+color:#000000;
+text-align:center;
+}
+    </style>
+    <center>
+        <apex:outputPanel id="displayMessage">
+                   <apex:actionstatus id="status1" startText="Processing...">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <h1>
+                                        <apex:pagemessage severity="error" summary="{!message}" rendered="{!displayErrorFlag}" strength="1"/>
+                                        <apex:pagemessage severity="info" summary="{!message}" rendered="{!displayInfoFlag}" strength="1"/>
+                                        <!--<apex:pagemessage severity="warning" summary="{!message}" rendered="{!displayWarningFlag}" strength="1"/>
+                                        
+                                        <apex:pagemessage severity="confirm" summary="{!message}" rendered="{!displayConfirmFlag}" strength="1"/>
+                                        -->
+                                        <p/>
+                                        </h1>
+                                </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel> 
+<table width="50%">
+         <tr>
+             <td>
+                    <b><apex:outputText style="font-style:bold" value="Revenue Target" ></apex:outputText></b>
+              </td>
+              <td>                 
+                    <apex:inputText value="{!targetrevenue}"></apex:inputText>(INR)</p>    
+               </td>
+           </tr><br/>
+               <tr>
+                    <td>                   
+                        <b><apex:outputText style="font-style:bold" value="Class type" styleClass="heading_text"></apex:outputText>                    
+                    </td>
+                    <td>
+                         <apex:selectList value="{!classtype}" multiselect="false" size="1" styleClass="dropdown_text">
+                            <apex:selectOptions value="{!classtypes}"/>
+                        </apex:selectList><p/>                                                 
+                    </td>
+               </tr>
+               <tr>
+                   <td>                       
+                       <b><apex:outputText style="font-style:bold" value="Period of estimation" styleClass="heading_text"></apex:outputText>
+                   </td>
+                   <td>                  
+                   <apex:selectList value="{!quarter}" multiselect="false" size="1" styleClass="dropdown_text">
+                        <apex:selectOptions value="{!periods}"/>
+
+                    </apex:selectList><p/>
+                   </td>
+               </tr>
+               <!--
+               <tr>
+                   <td>                       
+                       <b><apex:outputText style="font-style:bold" value="Quarter" styleClass="heading_text"></apex:outputText>
+                   </td>
+                   <td>                  
+                   <apex:selectList value="{!quarter}" multiselect="false" size="1" styleClass="dropdown_text">
+                        <apex:selectOptions value="{!quarters}"/>
+                    </apex:selectList><p/>
+                   </td>
+               </tr>
+                   <tr>
+                   <td>
+                   <b><apex:outputText style="font-style:bold" value="Year" styleClass="heading_text"></apex:outputText> 
+                   </td>
+                   <td>
+                   <apex:selectList value="{!year}" multiselect="false" size="1">
+                        <apex:selectOptions value="{!years}"/>
+                    </apex:selectList><p/>
+    
+                   </td>
+                   </tr>
+                  --> 
+                   <tr>
+                   <td>
+                   </td>
+                       <td>
+                            <apex:commandButton action="{!estimate}" value="Submit" rerender="out,displayMessage" status="status1"></apex:commandButton>
+                         </td>
+                    </tr>                  
+                        </table>
+                        </center>
+                   
+ 
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp 
+     
+        <center>
+         <apex:outputPanel id="out" >
+           <apex:actionstatus id="status" startText="processing...">
+            <apex:facet name="stop">
+            <apex:dataTable rendered="{!renderFlag}" value="{!displayList}" var="data" id="theTable" rowClasses="odd,even" width="50%" border="1" cellspacing="0" cellpadding="0" styleClass="border1">
+                <apex:column width="5%"  headerClass="yellow_header" styleClass="data2">
+                        <apex:facet name="header">Agent Name</apex:facet>
+                        <apex:outputText value="{!data.agentName}"/>
+                </apex:column>
+                <apex:column width="5%"  headerClass="yellow_header"  styleClass="data2">
+                        <apex:facet name="header" >Tickets To Sold</apex:facet>
+                        <apex:outputText value="{!data.numberOfTicketToSold}"/>
+                </apex:column>
+               
+            </apex:dataTable>
+           </apex:facet>
+         </apex:actionstatus>
+       </apex:outputPanel>
+     </center>
+      
+  </apex:form>
+</apex:page>

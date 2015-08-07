@@ -1,0 +1,6 @@
+<apex:page >
+<script type="text/javascript" src="{!$Resource.datetimepick}"/>
+  <apex:form >
+  <apex:inputText id="demo1" onclick="javascript:NewCal('demo1','yyyymmdd',false,24)"/>
+  </apex:form>
+</apex:page>

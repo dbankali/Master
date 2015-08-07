@@ -1,0 +1,27 @@
+<apex:page controller="newOpportunityController" tabStyle="Opportunity">
+<apex:sectionHeader title="New Customer Opportunity" subtitle="Step 1 of 3"/>
+<apex:form >
+<apex:pageBlock title="" mode="edit">
+<!-- The pageBlockButtons tag defines the buttons that appear at the top
+and bottom of the pageBlock. Like a facet, it can appear anywhere in
+a pageBlock, but always defines the button areas.-->
+<!-- The Next button contained in this pageBlockButtons area
+calls the step2 controller method, which returns a pageReference to
+the next step of the wizard. -->
+<apex:pageBlockButtons >
+<apex:commandButton action="{!step2}" value="Next"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection title="Account Information">
+<!-- Within a pageBlockSection, inputFields always display with their
+corresponding output label. -->
+<apex:inputField id="accountSite" value="{!account.site}" required="true"/>
+<apex:inputField id="accountName" value="{!account.name}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Contact Information">
+<apex:inputField id="contactFirstName" value="{!contact.firstName}"/>
+<apex:inputField id="contactLastName" value="{!contact.lastName}"/>
+<apex:inputField id="contactPhone" value="{!contact.phone}"/>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,47 @@
+<apex:page controller="ORC_For_All_Agent" sidebar="false" showHeader="true" tabstyle="Commission_Reports__tab">
+        <apex:sectionHeader title="All Agents Commission" subtitle="" description="" ></apex:sectionHeader>
+        <script >
+//Attempt to override JavaScript that is setting focus on Date field
+function setFocusOnLoad() {} //Or use beenFocused = true;
+</script>
+
+        <apex:form >
+             <apex:pageBlock title="">
+               <!--
+                <apex:outputLabel value="From Date" for="fromdate"/>                            
+                -->
+                <h1><apex:outputText style="font-style:bold" value="From Date"></apex:outputText></h1>
+               
+                <apex:inputField value="{!fromDateTask.From_Date__c}" onfocus="setFocusOnLoad()" id="fromdate"/>
+                                          
+                <h1><apex:outputText style="font-style:bold" value="To Date"></apex:outputText></h1>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <apex:inputField value="{!toDateTask.To_Date__c}" id="todate"/>
+                
+                               
+                <apex:commandButton value="Generate Report" action="{!generateReport}" rerender="out1" status="status1"/><p/>
+                <apex:outputPanel id="out1">
+                   <apex:actionstatus id="status1" startText="">
+                        <apex:facet name="stop">
+                                <apex:outputPanel >
+                                        <apex:pageBlockTable value="{!displayInfoList}" var="item">
+                                                <apex:column value="{!item.agentName}"> 
+                                                    <apex:facet name="header">Agent Name</apex:facet>
+                                                </apex:column>
+                                                <apex:column value="{!item.basicCommissionAmount}"> 
+                                                    <apex:facet name="header">Basic Commission Amount</apex:facet>
+                                                </apex:column>
+                                                <apex:column value="{!item.orcAmount}"> 
+                                                    <apex:facet name="header">ORC Amount</apex:facet>
+                                                </apex:column>
+                                                <apex:column value="{!item.totalCommissionAmount}"> 
+                                                    <apex:facet name="header">Total Commission</apex:facet>
+                                                </apex:column>
+                                            </apex:pageBlockTable> 
+                                </apex:outputPanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputPanel>
+                 </apex:pageBlock> 
+        </apex:form>
+  </apex:page>

@@ -1,0 +1,13 @@
+<apex:page controller="myHelloworld">
+<script type="text/javascript">
+function inlinemethod(){
+alert("inside inline script");
+}
+</script>
+<apex:form >
+   <apex:pageBlock title="Hello {!$User.FirstName}!">
+  <apex:inputText onclick="javascript:inlinemethod();"/><br/>
+  </apex:pageBlock>
+</apex:form>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

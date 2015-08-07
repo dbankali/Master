@@ -1,0 +1,95 @@
+<apex:page controller="ContactListController3" sidebar="false">
+<apex:form >
+<style>
+.rowHeaderClass{background:#CCCCCC}
+.rowOddClass{background:#FFFFFF}
+.rowEvenClass{background:#CCCCD0}
+</style>
+<script src="/soap/ajax/13.0/connection.js"></script>
+<script src="/soap/ajax/13.0/apex.js"></script>
+<script>
+
+/* This method is used to select 
+
+       or deselect all checkboxes*/
+       
+       function checkAll(cb)
+{
+
+var inputElem = document.getElementsByTagName("input");
+for(var i=0; i<inputElem.length; i++)
+{
+if(inputElem[i].id.indexOf("selectLine")!=-1)
+inputElem[i].checked = cb.checked;
+}
+}    
+
+function selectordeselect(field,box){
+         //alert("inside");
+        if(box.checked){
+          for(i=0;i < field.length;i++){           
+            field[i].checked = true;
+          }
+        }else if(!box.checked){
+            for(i=0;i < field.length;i++)
+               field[i].checked = false;
+         }
+   }
+      
+   </script>
+   <!--<apex:pageBlock title="Contact Lists">-->
+   <b><apex:outputLabel value="Contact List"></apex:outputLabel></b>&nbsp;|&nbsp;
+   <apex:outputLink value="" title="Advanced Contact Search">Advanced Contact Search</apex:outputLink>&nbsp;|&nbsp; <apex:outputLabel value="New Contact"/> <br><br>
+   <div>
+   <apex:commandLink >Delete</apex:commandLink>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <apex:commandLink action="{!download}">DownLoad To Excel</apex:commandLink>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+    <b>Contact Lists</b>
+   <!--<input type="checkbox" name="listMaster"  id="listMaster" onclick="selectordeselect(document.getElementsByName('contactList'),document.getElementById('listMaster'));&nbsp;List"/>-->
+     
+   <apex:datatable value="{!cList}" var="cLst" rules="row" columns="5" columnsWidth="30px,300px,200px,100px" rowClasses="rowOddClass,rowEvenClass" headerclass="rowHeaderClass">
+    <apex:column > 
+    <apex:facet name="header"> <apex:inputCheckbox id="master" >
+<apex:actionSupport event="onclick" action="{!getSelected}" onsubmit="checkAll(this)"/>
+   </apex:inputCheckbox></apex:facet>
+       <apex:inputCheckbox value="{!cLst.selected}" Id="selectLine">
+      
+       </apex:inputcheckbox>
+       </apex:column>
+   <!--<input type="checkbox" name="contactList" id="contactList" value="{!cList.id}"/>-->
+   <apex:column headervalue="List">
+        <apex:commandLink action="{!contactsList}" rerender="contactsTable">
+            {!cLst.theCList.List_Name__c}   
+            <apex:param name="id" value="{!cLst.theCList.Id}"/> 
+            <apex:param name="List_Name__c" value="{!cLst.theCList.List_Name__c}"/>         
+            </apex:commandLink>              
+   </apex:column>
+   <apex:column headervalue="Comments">
+     {!cLst.theCList.Comments__c}   
+   </apex:column>
+   <apex:column headervalue="Access">
+     {!cLst.theCList.Access__c}   
+   </apex:column>
+  <apex:column headervalue="# no of Contacts">
+     {!cLst.count}
+   </apex:column> 
+    </apex:datatable><br>
+  <apex:outputPanel id="contactsTable" title="Contacts"><b>Contacts from the List: {!listName}</b>
+    <apex:datatable value="{!Contacts}" var="contact" rendered="{!panelDisplay}"columnsWidth="200px,300px,100px" rowClasses="rowOddClass,rowEvenClass" styleClass="rowHeaderClass">
+       <apex:column headervalue="Name">
+       <apex:commandLink rerender="out1">
+       <apex:param name="id" value="{!contact.id}" />
+       {!contact.Name__c}
+       </apex:commandLink></apex:column>
+       <apex:column headerValue="Address">{!contact.Address__c}</apex:column>
+       <apex:column headerValue="Country">{!contact.Country__c}</apex:column>
+       <apex:column headervalue="ListName">{!contact.ContactList__c}</apex:column>
+    </apex:datatable>   
+    <apex:outputpanel id="out1">
+    <!-- <apex:detail subject="{!$CurrentPage.parameters.id} "/>-->
+   </apex:outputpanel> 
+   </apex:outputPanel>   
+   </div> 
+   
+
+ </apex:form> 
+</apex:page>

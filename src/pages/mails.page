@@ -1,0 +1,4 @@
+<apex:page >
+  <messaging:emailHeader name="Test"></messaging:emailHeader>
+ 
+</apex:page>
